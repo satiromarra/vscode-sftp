@@ -1,21 +1,20 @@
 {
-  "name": "sftp",
+  "name": "code-sftp",
   "displayName": "SFTP",
   "description": "SFTP/FTP sync",
-  "version": "1.16.2",
-  "publisher": "Natizyskunk",
-  "author": "Natizyskunk <natan.fourie@hotmail.fr> (https://github.com/Natizyskunk)",
+  "version": "1.16.3",
+  "publisher": "satiromarra",
+  "author": "satiromarra (https://github.com/satiromarra)",
   "engines": {
     "vscode": "^1.64.2"
   },
   "bugs": {
-    "url": "https://github.com/Natizyskunk/vscode-sftp/issues",
-    "email": "natan.fourie@hotmail.fr"
+    "url": "https://github.com/satiromarra/vscode-sftp/issues"
   },
-  "homepage": "https://github.com/Natizyskunk/vscode-sftp/blob/master/README.md",
+  "homepage": "https://github.com/satiromarra/vscode-sftp/blob/master/README.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Natizyskunk/vscode-sftp.git"
+    "url": "https://github.com/satiromarra/vscode-sftp.git"
   },
   "license": "MIT",
   "categories": [
@@ -216,6 +215,16 @@
       {
         "command": "sftp.create.file",
         "title": "Create File",
+        "category": "SFTP"
+      },
+      {
+        "command": "sftp.rename.file",
+        "title": "Rename File",
+        "category": "SFTP"
+      },
+      {
+        "command": "sftp.rename.folder",
+        "title": "Rename Folder",
         "category": "SFTP"
       },
       {
@@ -501,6 +510,16 @@
           "when": "view == remoteExplorer && viewItem != root && viewItem == file"
         },
         {
+          "command": "sftp.rename.file",
+          "group": "3_trans@1",
+          "when": "view == remoteExplorer && viewItem != root && viewItem == file && !listMultiSelection"
+        },
+        {
+          "command": "sftp.rename.folder",
+          "group": "3_trans@1",
+          "when": "view == remoteExplorer && viewItem != root && viewItem != file && !listMultiSelection"
+        },
+        {
           "command": "sftp.download.folder",
           "group": "3_trans@2",
           "alt": "sftp.forceDownload",
@@ -586,15 +605,17 @@
     "dev": "webpack --mode development --watch",
     "test": "jest",
     "package": "vsce package",
-    "pub:debug": "rm -rf _debug && mkdir _debug && vsce package --out _debug/sftp-debug.vsix && cd _debug && git init && git commit --allow-empty -m 'update debug package' && git checkout -b debug-pacakge && cp ../INSTALL_DEBUG.md README.md  && git add . && git commit -am 'update debug package' && git push git@github.com:Natizyskunk/vscode-sftp.git debug-pacakge --force"
+    "pub:debug": "rm -rf _debug && mkdir _debug && vsce package --out _debug/sftp-debug.vsix && cd _debug && git init && git commit --allow-empty -m 'update debug package' && git checkout -b debug-package && cp ../INSTALL_DEBUG.md README.md  && git add . && git commit -am 'update debug package' && git push git@github.com:satiromarra/vscode-sftp.git debug-package --force"
   },
   "devDependencies": {
+    "@types/babel__traverse": "^7.0.6",
     "@types/fs-extra": "^9.0.13",
     "@types/jest": "^23.3.5",
     "@types/lru-cache": "^4.1.1",
     "@types/node": "^9.6.51",
     "@types/vscode": "1.40",
     "@types/webpack-env": "^1.13.6",
+    "@types/yargs": "^17.0.8",
     "braces": ">=2.3.1",
     "glob-parent": ">=5.1.2",
     "jest": "^29.0.3",
