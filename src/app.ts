@@ -1,6 +1,6 @@
 import * as LRU from 'lru-cache';
 import StatusBarItem from './ui/statusBarItem';
-import { COMMAND_TOGGLE_OUTPUT } from './constants';
+import { COMMAND_SET_PROFILE } from './constants';
 import AppState from './modules/appState';
 import RemoteExplorer from './modules/remoteExplorer';
 
@@ -13,17 +13,13 @@ interface App {
 
 const app: App = Object.create(null);
 
-app.state = new AppState();
 app.sftpBarItem = new StatusBarItem(
   () => {
-    if (app.state.profile) {
-      return `SFTP: ${app.state.profile}`;
-    } else {
-      return 'SFTP';
-    }
+    return 'SFTP';
+    // return 'SFTP' + (new Date().toString());
   },
-  'SFTP@Natizyskunk',
-  COMMAND_TOGGLE_OUTPUT
+  'SFTP@satiromarra',
+  COMMAND_SET_PROFILE
 );
 app.fsCache = LRU<string, string>({ max: 6 });
 

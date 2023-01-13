@@ -41,16 +41,6 @@ export async function activate(context: vscode.ExtensionContext) {
 
   setContextValue('enabled', true);
   app.sftpBarItem.show();
-  app.state.subscribe(_ => {
-    const currentText = app.sftpBarItem.getText();
-    // current is showing profile
-    if (currentText.startsWith('SFTP')) {
-      app.sftpBarItem.reset();
-    }
-    if (app.remoteExplorer) {
-      app.remoteExplorer.refresh();
-    }
-  });
   try {
     await setup(workspaceFolders);
     app.remoteExplorer = new RemoteExplorer(context);

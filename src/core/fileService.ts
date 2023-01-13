@@ -82,10 +82,10 @@ interface FtpOption {
 
 export interface FileServiceConfig
   extends Root,
-    Host,
-    ServiceOption,
-    SftpOption,
-    FtpOption {
+  Host,
+  ServiceOption,
+  SftpOption,
+  FtpOption {
   profiles?: {
     [x: string]: FileServiceConfig;
   };
@@ -93,10 +93,10 @@ export interface FileServiceConfig
 
 export interface ServiceConfig
   extends Root,
-    Host,
-    Omit<ServiceOption, 'ignore'>,
-    SftpOption,
-    FtpOption {
+  Host,
+  Omit<ServiceOption, 'ignore'>,
+  SftpOption,
+  FtpOption {
   ignore?: ((fsPath: string) => boolean) | null;
 }
 
@@ -119,8 +119,7 @@ const DEFAULT_SSHCONFIG_FILE = '~/.ssh/config';
 
 function filesIgnoredFromConfig(config: FileServiceConfig): string[] {
   const cache = app.fsCache;
-  const ignore: string[] =
-    config.ignore && config.ignore.length ? config.ignore : [];
+  const ignore: string[] = config.ignore && config.ignore.length ? config.ignore : [];
 
   const ignoreFile = config.ignoreFile;
   if (!ignoreFile) {
@@ -180,9 +179,7 @@ function setConfigValue(config, key, value) {
   }
 }
 
-function mergeConfigWithExternalRefer(
-  config: FileServiceConfig
-): FileServiceConfig {
+function mergeConfigWithExternalRefer(config: FileServiceConfig): FileServiceConfig {
   const copyed = Object.assign({}, config);
 
   if (config.remote) {
@@ -192,7 +189,6 @@ function mergeConfigWithExternalRefer(
       throw new Error(`Can\'t not find remote "${config.remote}"`);
     }
     const remoteKeyMapping = new Map([['scheme', 'protocol']]);
-
     const remoteKeyIgnored = new Map([['rootPath', 1]]);
 
     Object.keys(remote).forEach(key => {
@@ -309,7 +305,7 @@ function getCompleteConfig(
   if (mergedConfig.agent && mergedConfig.privateKeyPath) {
     logger.warn(
       'Config Option Conflicted. You are specifing "agent" and "privateKey" at the same time, ' +
-        'the later will be ignored.'
+      'the later will be ignored.'
     );
   }
 
@@ -370,6 +366,7 @@ export default class FileService {
   private _name: string;
   private _watcherConfig: WatcherConfig;
   private _profiles: string[];
+  private _activeProfile: string | null;
   private _pendingTransferTasks: Set<TransferTask> = new Set();
   private _transferSchedulers: TransferScheduler[] = [];
   private _config: FileServiceConfig;
@@ -383,17 +380,20 @@ export default class FileService {
     },
   };
   id: number;
-  baseDir: string;
+  _baseDir: string;
   workspace: string;
 
   constructor(baseDir: string, workspace: string, config: FileServiceConfig) {
     this.id = ++id;
     this.workspace = workspace;
-    this.baseDir = baseDir;
+    this._baseDir = baseDir;
     this._watcherConfig = config.watcher;
     this._config = config;
     if (config.profiles) {
       this._profiles = Object.keys(config.profiles);
+    }
+    if (config.defaultProfile) {
+      this._activeProfile = config.defaultProfile;
     }
   }
 
@@ -403,6 +403,31 @@ export default class FileService {
 
   set name(name: string) {
     this._name = name;
+  }
+
+  get activeProfile(): string | null {
+    return this._activeProfile ? this._activeProfile : this._config.defaultProfile;
+  }
+
+  set activeProfile(profile: string | null) {
+    if (profile == null) {
+      profile = this._config.defaultProfile;
+    }
+    this._activeProfile = profile;
+  }
+
+  set baseDir(baseDir: string) {
+    this._baseDir = baseDir;
+  }
+
+  get baseDir(): string {
+    if (!this._profiles) {
+      return this._baseDir;
+    }
+    if (this._activeProfile && this._profiles.indexOf(this._activeProfile) > -1) {
+      return [this._baseDir, this._config.profiles![this._activeProfile].context].join('/');
+    }
+    return [this._baseDir, this._config.context].join('/');
   }
 
   setConfigValidator(configValidator: ConfigValidator) {
@@ -519,28 +544,26 @@ export default class FileService {
 
   getConfig(): ServiceConfig {
     let config = this._config;
-    const hasProfile =
-      config.profiles && Object.keys(config.profiles).length > 0;
-    if (hasProfile && app.state.profile) {
-      logger.info(`Using profile: ${app.state.profile}`);
-      const profile = config.profiles![app.state.profile];
-      if (!profile) {
+    let profiles: string[] = [];
+    const hasProfile = config.profiles && (profiles = Object.keys(config.profiles)) && profiles.length > 0;
+    if (hasProfile && this.activeProfile) {
+      logger.info(`Using profile: ${this.activeProfile}`);
+      if (profiles.indexOf(this.activeProfile) < 0) {
         throw new Error(
-          `Unkown Profile "${app.state.profile}".` +
-            ' Please check your profile setting.' +
-            ' You can set a profile by running command `SFTP: Set Profile`.'
+          `Unkown Profile "${this.activeProfile}".` +
+          ' Please check your profile setting.' +
+          ' You can set a profile by running command `SFTP: Set Profile`.'
         );
       }
-      config = mergeProfile(config, profile);
+      config = mergeProfile(config, config.profiles![this.activeProfile]);
     }
 
     const completeConfig = getCompleteConfig(config, this.workspace);
-    const error =
-      this._configValidator && this._configValidator(completeConfig);
+    const error = this._configValidator && this._configValidator(completeConfig);
     if (error) {
       let errorMsg = `Config validation fail: ${error.message}.`;
       // tslint:disable-next-line triple-equals
-      if (hasProfile && app.state.profile == null) {
+      if (hasProfile && this.activeProfile == null) {
         errorMsg += ' You might want to set a profile first.';
       }
       throw new Error(errorMsg);
@@ -554,11 +577,8 @@ export default class FileService {
     this._disposeFileSystem();
   }
 
-  private _resolveServiceConfig(
-    fileServiceConfig: FileServiceConfig
-  ): ServiceConfig {
+  private _resolveServiceConfig(fileServiceConfig: FileServiceConfig): ServiceConfig {
     const serviceConfig: ServiceConfig = fileServiceConfig as any;
-
     if (serviceConfig.port === undefined) {
       serviceConfig.port = chooseDefaultPort(serviceConfig.protocol);
     }
@@ -566,7 +586,6 @@ export default class FileService {
       serviceConfig.concurrency = 1;
     }
     serviceConfig.ignore = this._createIgnoreFn(fileServiceConfig);
-
     return serviceConfig;
   }
 

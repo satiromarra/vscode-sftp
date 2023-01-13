@@ -105,13 +105,17 @@ export default class RemoteTreeData
   }
 
   getTreeItem(item: ExplorerItem): vscode.TreeItem {
-    const isRoot = (item as ExplorerRoot).explorerContext !== undefined;
+    const explorer = (item as ExplorerRoot).explorerContext;
+    const isRoot = explorer !== undefined;
     let customLabel;
     if (isRoot) {
-      customLabel = (item as ExplorerRoot).explorerContext.fileService.name;
+      customLabel = explorer.config.name || explorer.config.host
     }
     if (!customLabel) {
       customLabel = upath.basename(item.resource.fsPath);
+    }
+    if (isRoot && explorer.fileService.activeProfile) {
+      customLabel += " (" + explorer.fileService.activeProfile + ")"
     }
     return {
       label: customLabel,
@@ -121,12 +125,12 @@ export default class RemoteTreeData
       command: item.isDirectory
         ? undefined
         : {
-            command: getExtensionSetting().downloadWhenOpenInRemoteExplorer
-              ? COMMAND_REMOTEEXPLORER_EDITINLOCAL
-              : COMMAND_REMOTEEXPLORER_VIEW_CONTENT,
-            arguments: [item],
-            title: 'View Remote Resource',
-          },
+          command: getExtensionSetting().downloadWhenOpenInRemoteExplorer
+            ? COMMAND_REMOTEEXPLORER_EDITINLOCAL
+            : COMMAND_REMOTEEXPLORER_VIEW_CONTENT,
+          arguments: [item],
+          title: 'View Remote Resource',
+        },
     };
   }
 
@@ -270,7 +274,7 @@ export default class RemoteTreeData
       this._rootsMap!.set(id, item);
       this._map.set(item.resource.uri.query, item);
     });
-    this._roots.sort((a,b) => a.explorerContext.config.remoteExplorer.order - b.explorerContext.config.remoteExplorer.order || a.explorerContext.fileService.name.localeCompare(b.explorerContext.fileService.name));
+    this._roots.sort((a, b) => a.explorerContext.config.remoteExplorer.order - b.explorerContext.config.remoteExplorer.order || a.explorerContext.fileService.name.localeCompare(b.explorerContext.fileService.name));
     return this._roots;
   }
 }
