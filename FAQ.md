@@ -1,3 +1,4 @@
+- [Error: session reuse required](#error-session-reuse-required)
 - [Error: Failure](#error-failure)
 	- [Error: Failure - Solution One](#error-failure---solution-one)
 	- [Error: Failure - Solution Two](#error-failure---solution-two)
@@ -9,6 +10,22 @@
 - [How can I upload files as root?](#how-can-i-upload-files-as-root)
 - [Automatically sync both ways without user interaction](#automatically-sync-both-ways-without-user-interaction)
 - [Show dotfiles/hidden files in remote explorer](#show-dotfileshidden-files-in-remote-explorer)
+
+
+## Error: session reuse required
+
+```json
+{
+  "name": "xxx",
+  "password": "xxx",
+  "username": "xxx",
+  "host": "xxx",
+  "protocol": "ftp",
+  "port": 21,
+  "secure": true,
+  "secureOptions":  {"rejectUnauthorized": false, "secureProtocol" :"TLSv1_2_method"}
+}
+```
 
 ## Error: Failure
 
