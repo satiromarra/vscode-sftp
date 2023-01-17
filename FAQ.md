@@ -14,6 +14,8 @@
 
 ## Error: session reuse required
 
+If the ftp server is vsftpd, tries these configuration:
+
 ```json
 {
   "name": "xxx",
