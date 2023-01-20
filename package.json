@@ -2,7 +2,7 @@
 	"name": "code-sftp",
 	"displayName": "SFTP",
 	"description": "SFTP/FTP sync",
-	"version": "1.16.4",
+	"version": "1.16.5",
 	"publisher": "satiromarra",
 	"author": "satiromarra (https://github.com/satiromarra)",
 	"engines": {
@@ -219,6 +219,11 @@
 			{
 				"command": "sftp.create.file",
 				"title": "Create File",
+				"category": "SFTP"
+			},
+			{
+				"command": "sftp.remote.chmod",
+				"title": "Change permissions",
 				"category": "SFTP"
 			},
 			{
@@ -518,6 +523,11 @@
 					"group": "3_trans@1",
 					"when": "view == remoteExplorer && viewItem != root && viewItem == file"
 				},
+        {
+          "command": "sftp.remote.chmod",
+					"group": "3_trans@1",
+					"when": "view == remoteExplorer && viewItem != root && !listMultiSelection"
+        },
 				{
 					"command": "sftp.rename.file",
 					"group": "3_trans@1",

@@ -1,3 +1,12 @@
+## 1.16.5 - 2023-01-20
+* Change remote permission in folder and files
+
+## 1.16.4 - 2023-01-13
+* Multiples profiles and context
+
+## 1.16.3 - 2023-01-12
+* Rename remote files and folders
+
 ## pre-1.16.2 - 2022-11-30
 * [#271] Fix case change of file name not sent correctly (Pull request [#249](https://github.com/Natizyskunk/vscode-sftp/pull/249) from @NyaPPuu vscode-sftp:fix_rename).
 * [#272] Update npm `types/node` depedency to v9.6.51.

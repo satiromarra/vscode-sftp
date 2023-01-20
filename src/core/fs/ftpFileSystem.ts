@@ -138,9 +138,9 @@ export default class FTPFileSystem extends RemoteFileSystem {
     return stream;
   }
 
-  async chmod(path: string, mode: number): Promise<void> {
-    const command = `CHMOD ${mode.toString(8)} ${path}`;
-    return await this.atomicSite(command);
+  chmod(path: string, mode: string): Promise<void> {
+    const command = `CHMOD ${parseInt(mode).toString(8)} ${path}`;
+    return this.atomicSite(command);
   }
 
   async put(input: Readable, path, _option?: FileOption): Promise<void> {

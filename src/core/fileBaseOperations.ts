@@ -2,6 +2,7 @@ import { FileSystem } from './fs';
 import { window } from 'vscode';
 import { Readable } from 'stream';
 import logger from '../logger';
+import { FileStats } from './fs/fileSystem';
 
 interface FileOption {
   mode?: number;
@@ -50,6 +51,14 @@ export function rename(srcPath: string, destPath: string, fs: FileSystem): Promi
 
 export function createDir(path: string, fs: FileSystem, option): Promise<void> {
   return fs.mkdir(path);
+}
+
+export function lstat(path: string, fs: FileSystem): Promise<FileStats> {
+  return fs.lstat(path);
+}
+
+export function chmod(path: string, fs: FileSystem, mode: string): Promise<void> {
+  return fs.chmod(path, mode);
 }
 
 export async function createFile(path: string, fs: FileSystem, option): Promise<void> {
