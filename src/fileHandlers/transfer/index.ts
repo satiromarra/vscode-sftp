@@ -6,7 +6,7 @@ function createTransferHandle(direction: TransferDirection) {
   return async function handle(this: FileHandlerContext, option) {
     const remoteFs = await this.fileService.getRemoteFileSystem(this.config);
     const localFs = this.fileService.getLocalFileSystem();
-    const { localFsPath, remoteFsPath } = this.target;
+    const { localFsPath, remoteFsPath, /* localUri, remoteUri */ } = this.target;
     const scheduler = this.fileService.createTransferScheduler(this.config.concurrency);
     let transferConfig;
 
@@ -21,9 +21,9 @@ function createTransferHandle(direction: TransferDirection) {
       };
     } else {
       transferConfig = {
-        srcFsPath: localFsPath,
+        srcFsPath: localFsPath, // localUri.fsPath
         srcFs: localFs,
-        targetFsPath: remoteFsPath,
+        targetFsPath: remoteFsPath,//  remoteUri.fsPath
         targetFs: remoteFs,
         transferOption: option,
         transferDirection: TransferDirection.LOCAL_TO_REMOTE,

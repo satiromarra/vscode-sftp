@@ -58,6 +58,33 @@
         "type": "string",
         "description": "Relative path relative to the workspace root folder."
       },
+      "watcher": {
+        "type": "object",
+        "description": "Watch external modification.",
+        "properties": {
+          "files": {
+            "type": "string",
+            "description": "A glob pattern.",
+            "default": "**/*"
+          },
+          "autoUpload": {
+            "type": "boolean",
+            "description": "upload when file changed.",
+            "default": true
+          },
+          "autoDelete": {
+            "type": "boolean",
+            "description": "delete when file changed.",
+            "default": false
+          }
+        },
+        "required": ["files"],
+        "default": {
+          "files": "**/*",
+          "autoUpload": true,
+          "autoDelete": false
+        }
+      },
       "uploadOnSave": {
         "type": "boolean",
         "description": "True to upload on every save operation of VS Code.",

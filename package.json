@@ -2,7 +2,7 @@
 	"name": "code-sftp",
 	"displayName": "SFTP",
 	"description": "SFTP/FTP sync",
-	"version": "1.16.5",
+	"version": "1.16.6",
 	"publisher": "satiromarra",
 	"author": "satiromarra (https://github.com/satiromarra)",
 	"engines": {
@@ -142,6 +142,11 @@
 				"category": "SFTP"
 			},
 			{
+				"command": "sftp.download.fileAs",
+				"title": "Download File As ...",
+				"category": "SFTP"
+			},
+			{
 				"command": "sftp.download.activeFile",
 				"title": "Download Active File",
 				"category": "SFTP"
@@ -149,6 +154,11 @@
 			{
 				"command": "sftp.download.folder",
 				"title": "Download Folder",
+				"category": "SFTP"
+			},
+			{
+				"command": "sftp.download.folderAs",
+				"title": "Download Folder As ...",
 				"category": "SFTP"
 			},
 			{
@@ -352,7 +362,15 @@
 					"when": "false"
 				},
 				{
+					"command": "sftp.download.fileAs",
+					"when": "false"
+				},
+				{
 					"command": "sftp.download.folder",
+					"when": "false"
+				},
+				{
+					"command": "sftp.download.folderAs",
 					"when": "false"
 				},
 				{
@@ -441,7 +459,6 @@
 				{
 					"command": "sftp.download.folder",
 					"group": "sftp.trans@2",
-					"alt": "sftp.forceDownload",
 					"when": "sftp.enabled && explorerResourceIsFolder"
 				}
 			],
@@ -516,18 +533,13 @@
 					"command": "sftp.upload.folder",
 					"group": "3_trans@1",
 					"alt": "sftp.forceUpload",
-					"when": "sftp.enabled && viewItem != file"
+					"when": "sftp.enabled && view == remoteExplorer && viewItem != file"
 				},
 				{
 					"command": "sftp.upload.file",
 					"group": "3_trans@1",
 					"when": "view == remoteExplorer && viewItem != root && viewItem == file"
 				},
-        {
-          "command": "sftp.remote.chmod",
-					"group": "3_trans@1",
-					"when": "view == remoteExplorer && viewItem != root && !listMultiSelection"
-        },
 				{
 					"command": "sftp.rename.file",
 					"group": "3_trans@1",
@@ -542,12 +554,22 @@
 					"command": "sftp.download.folder",
 					"group": "3_trans@2",
 					"alt": "sftp.forceDownload",
-					"when": "sftp.enabled && viewItem != file"
+					"when": "sftp.enabled && view == remoteExplorer && viewItem != file"
+				},
+				{
+					"command": "sftp.download.folderAs",
+					"group": "3_trans@2",
+					"when": "sftp.enabled && view == remoteExplorer && viewItem != file && !listMultiSelection"
 				},
 				{
 					"command": "sftp.download.file",
 					"group": "3_trans@2",
 					"when": "view == remoteExplorer && viewItem != root && viewItem == file"
+				},
+				{
+					"command": "sftp.download.fileAs",
+					"group": "3_trans@2",
+					"when": "view == remoteExplorer && viewItem != root && viewItem == file && !listMultiSelection"
 				},
 				{
 					"command": "sftp.delete.remote",
@@ -563,6 +585,11 @@
 					"command": "sftp.create.file",
 					"group": "7_modification",
 					"when": "view == remoteExplorer && viewItem != file"
+				},
+				{
+					"command": "sftp.remote.chmod",
+					"group": "3_trans@3",
+					"when": "view == remoteExplorer && viewItem != root && !listMultiSelection"
 				}
 			],
 			"scm/title": [
@@ -679,5 +706,11 @@
 			"<rootDir>/test/**/*.spec.js",
 			"<rootDir>/**/*/__tests__/*.ts"
 		]
+	},
+	"__metadata": {
+		"id": "e095fa90-8e33-4502-abff-d1c303fc3ef5",
+		"publisherDisplayName": "Satiro Marra",
+		"publisherId": "29aee36d-205d-4ee7-a606-c08a8ba4143b",
+		"isPreReleaseVersion": false
 	}
 }

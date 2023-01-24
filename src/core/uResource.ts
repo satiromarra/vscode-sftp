@@ -65,8 +65,9 @@ export type Resource = InstanceType<typeof _Resource>;
 
 // Universal resource
 export default class UResource {
-  private readonly _localResouce: Resource;
-  private readonly _remoteResouce: Resource;
+  private _root: Resource | ResourceConfig;
+  private _localResouce: Resource;
+  private _remoteResouce: Resource;
 
   static isRemote(uri: Uri) {
     return uri.scheme === REMOTE_SCHEME;
@@ -108,7 +109,7 @@ export default class UResource {
 
   static from(uri: Uri, root: Resource | ResourceConfig): UResource {
     if ((root as Resource).fsPath) {
-      return new UResource(new _Resource(uri), root as Resource);
+      return new UResource(new _Resource(uri), root as Resource, root);
     }
 
     const { localBasePath, remoteBasePath, remote, remoteId } = root as ResourceConfig;
@@ -133,12 +134,13 @@ export default class UResource {
       localResouce = new _Resource(uri);
     }
 
-    return new UResource(localResouce, remoteResouce);
+    return new UResource(localResouce, remoteResouce, root);
   }
 
-  private constructor(localResouce: Resource, remoteResouce: Resource) {
+  private constructor(localResouce: Resource, remoteResouce: Resource, root: Resource | ResourceConfig) {
     this._localResouce = localResouce;
     this._remoteResouce = remoteResouce;
+    this._root = root;
   }
 
   get localFsPath(): string {
@@ -155,5 +157,32 @@ export default class UResource {
 
   get remoteUri(): Uri {
     return this._remoteResouce.uri;
+  }
+
+  localResourceFromUri(uri: Uri) {
+    const { localBasePath, remoteBasePath } = this._root as ResourceConfig;
+    if (uri.scheme === REMOTE_SCHEME) {
+      const localFsPath = toLocalPath(
+        UResource.makeResource(uri).fsPath,
+        remoteBasePath,
+        localBasePath
+      );
+      this._localResouce = new _Resource(Uri.file(localFsPath));
+    } else {
+      this._localResouce = new _Resource(uri);
+    }
+  }
+  remoteResourceFromUri(uri: Uri) {
+    const { localBasePath, remoteBasePath, remote, remoteId } = this._root as ResourceConfig;
+    if (uri.scheme === REMOTE_SCHEME) {
+      this._remoteResouce = new _Resource(uri);
+    } else {
+      const remoteFsPath = toRemotePath(uri.fsPath, localBasePath, remoteBasePath);
+      this._remoteResouce = UResource.makeResource({
+        remote,
+        fsPath: remoteFsPath,
+        remoteId,
+      });
+    }
   }
 }

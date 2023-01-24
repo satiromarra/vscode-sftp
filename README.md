@@ -20,6 +20,7 @@ VSCode-SFTP enables you to add, edit or delete files within a local directory an
   - (new) Rename remote Files and Folders
   - (new) Multiple configurations with multiples profiles
   - (new) Change remote permission in folder and files
+  - (new) Download files and folders as another name
 - [Commands](https://github.com/satiromarra/vscode-sftp/wiki/Commands)
 - [Debug](#debug)
 - [FAQ](#FAQ)

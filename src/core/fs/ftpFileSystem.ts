@@ -139,7 +139,7 @@ export default class FTPFileSystem extends RemoteFileSystem {
   }
 
   chmod(path: string, mode: string): Promise<void> {
-    const command = `CHMOD ${parseInt(mode).toString(8)} ${path}`;
+    const command = `CHMOD ${parseInt(mode).toString(10)} ${path}`;
     return this.atomicSite(command);
   }
 

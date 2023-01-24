@@ -24,6 +24,11 @@ interface Root {
   defaultProfile: string;
 }
 
+interface BaseProfile {
+  id: string;
+  name: string;
+}
+
 interface Host {
   host: string;
   port: number;
@@ -384,6 +389,9 @@ export default class FileService {
   workspace: string;
 
   constructor(baseDir: string, workspace: string, config: FileServiceConfig) {
+    if (baseDir.slice(-1) == path.sep) {
+      baseDir = baseDir.slice(0, -1);
+    }
     this.id = ++id;
     this.workspace = workspace;
     this._baseDir = baseDir;
@@ -425,9 +433,20 @@ export default class FileService {
       return this._baseDir;
     }
     if (this._activeProfile && this._profiles.indexOf(this._activeProfile) > -1) {
-      return [this._baseDir, this._config.profiles![this._activeProfile].context].join('/');
+      return upath.join(this._baseDir, (this._config.profiles![this._activeProfile].context || ''));
     }
-    return [this._baseDir, this._config.context].join('/');
+    return upath.join(this._baseDir, (this._config.context || ''));
+  }
+
+  get watcherConfig(): WatcherConfig {
+    let watcherConfig = this._watcherConfig;
+    if (this._activeProfile && this._profiles.length && this._profiles.indexOf(this._activeProfile) > -1) {
+      return {
+        ...watcherConfig,
+        ...this._config.profiles![this._activeProfile].watcher || {}
+      };
+    }
+    return watcherConfig;
   }
 
   setConfigValidator(configValidator: ConfigValidator) {
@@ -443,8 +462,20 @@ export default class FileService {
     this._createWatcher();
   }
 
-  getAvaliableProfiles(): string[] {
-    return this._profiles || [];
+  getAvaliableProfiles(): BaseProfile[] {
+    if (!this._profiles) {
+      return [];
+    }
+    let prf: BaseProfile[] = [];
+    this._profiles.forEach(profile => {
+      prf.push({
+        "id": profile,
+        "name": this._config.profiles![profile].name || this.name
+      });
+    });
+    return prf;
+    // console.log(prf);
+    // return this._profiles || [];
   }
 
   getPendingTransferTasks(): TransferTask[] {
@@ -630,7 +661,7 @@ export default class FileService {
   }
 
   private _createWatcher() {
-    this._watcherService.create(this.baseDir, this._watcherConfig);
+    this._watcherService.create(this.baseDir, this.watcherConfig);
   }
 
   private _disposeWatcher() {

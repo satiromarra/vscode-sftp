@@ -90,7 +90,7 @@ export default abstract class FileSystem {
     const err = new Error('Transfer Aborted') as FileSystemError;
     err.code = ERROR_MSG_STREAM_INTERRUPT;
 
-    // don't do `stream.destroy(err)`! `sftp.ReadaStream` do not support `err` parameter in `destory` method.
+    // don't do `stream.destroy(err)`! `sftp.ReadaStream` do not support `err` parameter in `destroy` method.
     stream.emit('error', err);
     stream.destroy();
   }

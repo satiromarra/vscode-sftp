@@ -5,6 +5,8 @@ import app from '../app';
 import { getAllFileService } from '../modules/serviceManager';
 import { checkCommand } from './abstract/createCommand';
 import { FileService } from '../core';
+import watcherService from '../modules/fileWatcher';
+import logger from '../logger';
 
 export default checkCommand({
   id: COMMAND_SET_PROFILE,
@@ -17,9 +19,9 @@ export default checkCommand({
         }
         service.getAvaliableProfiles().forEach(profile => {
           acc.push({
-            value: profile,
+            value: profile.id,
             service: service,
-            label: `${service.name} | Profile: ${profile}` + (service.activeProfile === profile ? " | active" : ""),
+            label: `${profile.name || service.name} | Profile: (${profile.id})` + (service.activeProfile === profile.id ? " | active" : ""),
           });
         });
         acc.push({
@@ -39,7 +41,10 @@ export default checkCommand({
     const item = await vscode.window.showQuickPick(profiles, { placeHolder: 'select a profile' });
     if (item === undefined) return;
     app.sftpBarItem.showMsg(`SFTP: Set profile: ${item.label}`);
+    logger.log(`SFTP: Set profile: ${item.label}`);
     item.service.activeProfile = item.value;
+    // TODO: Revisar watcherService
+    item.service.setWatcherService(watcherService);
     if (app.remoteExplorer) {
       app.remoteExplorer.refresh();
     }

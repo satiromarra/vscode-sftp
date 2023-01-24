@@ -128,7 +128,7 @@ function init() {
   });
 }
 
-function destory() {
+function destroy() {
   if (workspaceWatcher) {
     workspaceWatcher.dispose();
   }
@@ -136,5 +136,5 @@ function destory() {
 
 export default {
   init,
-  destory,
+  destroy,
 };

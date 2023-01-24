@@ -12,7 +12,7 @@ import { flatten } from '../../utils';
 import logger from '../../logger';
 import { getOpenTextDocuments } from '../../host';
 
-interface InternalTransferOption extends FileHandleOption, TransferTaskTransferOption {}
+interface InternalTransferOption extends FileHandleOption, TransferTaskTransferOption { }
 
 type ExternalTransferOption<T extends InternalTransferOption> = Pick<
   T,
@@ -101,8 +101,8 @@ async function transferFolder(
       )
     )
   );
-  
-  logger.info('folder transfered.');
+
+  logger.info('folder [' + srcFsPath + '] transfered.');
 }
 
 async function transferFile(

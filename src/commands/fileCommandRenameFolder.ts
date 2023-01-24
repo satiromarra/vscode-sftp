@@ -28,7 +28,9 @@ export default checkFileCommand({
     });
 
     if (result !== undefined) {
-      return targets.with({ path: [upath.dirname(targets.fsPath), result].join('/') })
+      return targets.with({
+        path: upath.join(upath.dirname(targets.fsPath), result)
+      });
     }
     return undefined;
   },
