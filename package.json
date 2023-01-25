@@ -17,6 +17,10 @@
 		"url": "https://github.com/satiromarra/vscode-sftp.git"
 	},
 	"license": "MIT",
+  "galleryBanner": {
+      "color": "#ffdfbb",
+      "theme": "dark"
+  },
 	"categories": [
 		"Other"
 	],
