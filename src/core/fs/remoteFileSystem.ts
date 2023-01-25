@@ -76,6 +76,17 @@ export default abstract class RemoteFileSystem extends FileSystem {
     return localtime + this._remoteTimeOffsetInSeconds;
   }
 
+  chmod2(path: string, mode: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.client.getFsClient().chmod(path, mode, (err) => {
+        if (err) {
+          return reject(err);
+        }
+        resolve();
+      });
+    });
+  }
+
   async readFile(path: string, option?: FileOption): Promise<string | Buffer> {
     return new Promise<string | Buffer>(async (resolve, reject) => {
       let stream;

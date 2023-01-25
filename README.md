@@ -1,10 +1,7 @@
 # sftp sync extension for VS Code
 
-Maintained and updated version by [@Natizyskunk](https://github.com/Natizyskunk/) 😀 <br>
-(Forked from the no longer maintained [liximomo's SFTP plugin](https://github.com/liximomo/vscode-sftp.git))
-
-- VS Code marketplace : https://marketplace.visualstudio.com/items?itemName=Natizyskunk.sftp <br>
-- VSIX release : https://github.com/Natizyskunk/vscode-sftp/releases/
+- VS Code marketplace : https://marketplace.visualstudio.com/items?itemName=satiromarra.code-sftp <br>
+- VSIX release : https://github.com/satiromarra/vscode-sftp/releases/
 
 ---
 
@@ -20,7 +17,11 @@ VSCode-SFTP enables you to add, edit or delete files within a local directory an
   - Multiple configurations
   - Switchable profiles
   - Temp File support
-- [Commands](https://github.com/Natizyskunk/vscode-sftp/wiki/Commands)
+  - (new) Rename remote Files and Folders
+  - (new) Multiple configurations with multiples profiles
+  - (new) Change remote permission in folder and files
+  - (new) Download files and folders as another name
+- [Commands](https://github.com/satiromarra/vscode-sftp/wiki/Commands)
 - [Debug](#debug)
 - [FAQ](#FAQ)
 
@@ -29,7 +30,7 @@ VSCode-SFTP enables you to add, edit or delete files within a local directory an
 ### Method 1 (Recommended : Auto update)
 1. Select Extensions (Ctrl + Shift + X).
 2. Uninstall current sftp extension from @liximomo.
-3. Install new extension directly from VS Code Marketplace : https://marketplace.visualstudio.com/items?itemName=Natizyskunk.sftp.
+3. Install new extension directly from VS Code Marketplace : https://marketplace.visualstudio.com/items?itemName=satiromarra.code-sftp.
 4. Voilà!
 
 ### Method 2 (Manual update)
@@ -42,12 +43,12 @@ To install just follow these steps from within VSCode:
 6. Voilà!
 
 ## Documentation
-- [Home](https://github.com/Natizyskunk/vscode-sftp/wiki)
-- [Settings](https://github.com/Natizyskunk/vscode-sftp/wiki/Setting)
-- [Common configuration](https://github.com/Natizyskunk/vscode-sftp/wiki/Common-Configuration)
-- [SFTP configuration](https://github.com/Natizyskunk/vscode-sftp/wiki/SFTP-only-Configuration)
-- [FTP confriguration](https://github.com/Natizyskunk/vscode-sftp/wiki/FTP(s)-only-Configuration)
-- [Commands](https://github.com/Natizyskunk/vscode-sftp/wiki/Commands)
+- [Home](https://github.com/satiromarra/vscode-sftp/wiki)
+- [Settings](https://github.com/satiromarra/vscode-sftp/wiki/Setting)
+- [Common configuration](https://github.com/satiromarra/vscode-sftp/wiki/Common-Configuration)
+- [SFTP configuration](https://github.com/satiromarra/vscode-sftp/wiki/SFTP-only-Configuration)
+- [FTP confriguration](https://github.com/satiromarra/vscode-sftp/wiki/FTP(s)-only-Configuration)
+- [Commands](https://github.com/satiromarra/vscode-sftp/wiki/Commands)
 
 ## Usage
 If the latest files are already on a remote server, you can start with an empty local folder,
@@ -82,10 +83,10 @@ _Note：_ backslashes and other special characters must be escaped with a backsl
 8. Done - you can now edit locally and after each save it will upload to sync your remote file with the local copy. 
 9. Enjoy!
 
-For detailed explanations please go to [wiki](https://github.com/Natizyskunk/vscode-sftp/wiki).
+For detailed explanations please go to [wiki](https://github.com/satiromarra/vscode-sftp/wiki).
 
 ## Example configurations
-You can see the full list of configuration options [here](https://github.com/Natizyskunk/vscode-sftp/wiki/configuration).
+You can see the full list of configuration options [here](https://github.com/satiromarra/vscode-sftp/wiki/configuration).
 
 - [sftp sync extension for VS Code](#sftp-sync-extension-for-vs-code)
   - [Installation](#installation)
@@ -171,8 +172,61 @@ The context must **not be same**.
   }
 ]
 ```
-
 _Note：_ `name` is required in this mode.
+### Multiple Profiles and Contexts
+
+```json
+[
+  {
+    "name": "server1",
+    "context": "project/build",
+    "host": "host",
+    "username": "username",
+    "password": "password",
+    "remotePath": "/remote/project/build",
+    "profiles": {
+      "dev1": {
+        "name": "Server Dev 1",
+        "context": "dev-v1",
+        "host": "dev-host",
+        "remotePath": "/dev",
+        "uploadOnSave": true
+      },
+      "prod1": {
+        "name": "Server Prod 1",
+        "context": "prod-v1",
+        "host": "prod-host",
+        "remotePath": "/prod"
+      }
+    },
+    "defaultProfile": "dev1"
+    },
+  {
+    "name": "server2",
+    "context": "project/src",
+    "host": "host",
+    "username": "username",
+    "password": "password",
+    "remotePath": "/remote/project/src",
+    "profiles": {
+      "dev2": {
+        "name": "Server Dev 2",
+        "context": "dev-v2",
+        "host": "dev-host",
+        "remotePath": "/dev",
+        "uploadOnSave": true
+      },
+      "prod2": {
+        "name": "Server Prod 2",
+        "context": "prod-v2",
+        "host": "prod-host",
+        "remotePath": "/prod"
+      }
+    },
+    "defaultProfile": "dev2"
+  }
+]
+```
 
 ### Connection Hopping
 You can connect to a target server through a proxy with ssh protocol.
@@ -263,7 +317,7 @@ In sftp.json:
 ```
 
 ## Remote Explorer
-![remote-explorer-preview](https://raw.githubusercontent.com/Natizyskunk/vscode-sftp/master/assets/showcase/remote-explorer.png)
+![remote-explorer-preview](https://raw.githubusercontent.com/satiromarra/vscode-sftp/master/assets/showcase/remote-explorer.png)
 
 Remote Explorer lets you explore files in remote. You can open Remote Explorer by:
 
@@ -303,9 +357,7 @@ You can see all the Frequently Asked Questions [here](./FAQ.md).
 If this project helped you reduce development time and you wish to contribute financially
 
 ### Buy Me a Coffee
-[![Buy Me A Coffee](https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png)](https://www.buymeacoffee.com/Natizyskunk)
+[![Buy Me A Coffee](https://bmc-cdn.nyc3.digitaloceanspaces.com/BMC-button-images/custom_images/orange_img.png)](https://www.buymeacoffee.com/satiromarra)
 
 ### PayPal
-<!-- [![PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=BY89QD47D7MPS&source=url) -->
-[![PayPal](https://www.paypalobjects.com/en_US/i/btn/btn_donate_SM.gif)](https://www.paypal.com/donate?business=DELD7APHHM3BC&no_recurring=0&currency_code=EUR)
-[![PayPal Me](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/natanfourie)
+[![PayPal Me](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://paypal.me/satiromarra)

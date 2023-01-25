@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import logger from '../logger';
+import { realpathSync } from 'fs';
 import app from '../app';
 import StatusBarItem from '../ui/statusBarItem';
 import { onDidOpenTextDocument, onDidSaveTextDocument, showConfirmMessage } from '../host';
@@ -45,7 +46,8 @@ async function handleFileSave(uri: vscode.Uri) {
 
   const config = fileService.getConfig();
   if (config.uploadOnSave) {
-    const fspath = uri.fsPath;
+    const fspath = await realpathSync.native(uri.fsPath);
+    uri = vscode.Uri.file(fspath);
     logger.info(`[file-save] ${fspath}`);
     try {
       await uploadFile(uri);
@@ -126,7 +128,7 @@ function init() {
   });
 }
 
-function destory() {
+function destroy() {
   if (workspaceWatcher) {
     workspaceWatcher.dispose();
   }
@@ -134,5 +136,5 @@ function destory() {
 
 export default {
   init,
-  destory,
+  destroy,
 };

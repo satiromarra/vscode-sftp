@@ -67,7 +67,17 @@ export default class SFTPFileSystem extends RemoteFileSystem {
       });
     });
   }
-
+  chmod(path: string, mode: string): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.sftp.chmod(path, mode, (err, stat) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(stat);
+      });
+    });
+  }
   open(
     path: string,
     flags: string,

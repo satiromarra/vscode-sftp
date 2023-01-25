@@ -1,5 +1,22 @@
+## 1.16.4 - 2023-01-24
+* Download files and folders as another name
+* Fix paths into watcher
+
+## 1.16.5 - 2023-01-20
+* Change remote permission in folder and files
+
+## 1.16.4 - 2023-01-13
+* Multiples profiles and context
+
+## 1.16.3 - 2023-01-12
+* Rename remote files and folders
+
+## pre-1.16.2 - 2022-11-30
+* [#271] Fix case change of file name not sent correctly (Pull request [#249](https://github.com/Natizyskunk/vscode-sftp/pull/249) from @NyaPPuu vscode-sftp:fix_rename).
+* [#272] Update npm `types/node` depedency to v9.6.51.
+
 ## 1.16.1 - 2022-11-02
-* [#251] Add multiple select + Update `Download File` & `Downalod Folder` commands to the remote view + Add `Upload File` & `Upload Folder` commands to the remote view (Pull request [#221](https://github.com/Natizyskunk/vscode-sftp/pull/221) from @NyaPPuu vscode-sftp:add_multiple_select).
+* [#251] Add multiple select + Update `Download File` & `Download Folder` commands to the remote view + Add `Upload File` & `Upload Folder` commands to the remote view (Pull request [#221](https://github.com/Natizyskunk/vscode-sftp/pull/221) from @NyaPPuu vscode-sftp:add_multiple_select).
 
 ## 1.16.0 - 2022-10-29
 * [#242] Add order option and fix typos in docs (Pull request [#157](https://github.com/Natizyskunk/vscode-sftp/pull/157) from @NyaPPuu vscode-sftp:add_order_option).
@@ -8,7 +25,7 @@
 
 ## 1.15.20 - 2022-08-28
 * Fix typo 'worksapce' to 'workspace' (Pull request [#158](https://github.com/Natizyskunk/vscode-sftp/pull/158) from @NyaPPuu vscode-sftp:fix_typo).
-* Add `Download File` & `Downalod Folder` commands to the remote view (Thanks to @mrandrey on issue #97).
+* Add `Download File` & `Download Folder` commands to the remote view (Thanks to @mrandrey on issue #97).
 * Update npm `types/fs-extra` depedency to v9.0.13 (Pull request [#204](https://github.com/Natizyskunk/vscode-sftp/pull/204) from @dependabot vscode-sftp:dependabot/npm_and_yarn/types/fs-extra-9.0.13).
 * Update npm `typescript-tslint-plugin` depedency to v1.0.2 (Pull request [#206](https://github.com/Natizyskunk/vscode-sftp/pull/206) from @dependabot vscode-sftp:dependabot/npm_and_yarn/typescript-tslint-plugin-1.0.2).
 * Update npm `tslint` depedency to v6.1.3 (Pull request [#207](https://github.com/Natizyskunk/vscode-sftp/pull/207) from @dependabot vscode-sftp:dependabot/npm_and_yarn/tslint-6.1.3).

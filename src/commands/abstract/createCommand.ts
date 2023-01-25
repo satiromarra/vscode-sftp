@@ -7,6 +7,7 @@ import Command from './command';
 interface BaseCommandOption {
   id: string;
   name?: string;
+  options?: {}
 }
 
 interface CommandOption extends BaseCommandOption {

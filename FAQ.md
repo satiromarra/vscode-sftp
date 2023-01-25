@@ -1,3 +1,4 @@
+- [Error: session reuse required](#error-session-reuse-required)
 - [Error: Failure](#error-failure)
 	- [Error: Failure - Solution One](#error-failure---solution-one)
 	- [Error: Failure - Solution Two](#error-failure---solution-two)
@@ -9,6 +10,24 @@
 - [How can I upload files as root?](#how-can-i-upload-files-as-root)
 - [Automatically sync both ways without user interaction](#automatically-sync-both-ways-without-user-interaction)
 - [Show dotfiles/hidden files in remote explorer](#show-dotfileshidden-files-in-remote-explorer)
+
+
+## Error: session reuse required
+
+If the ftp server is vsftpd, tries these configuration:
+
+```json
+{
+  "name": "xxx",
+  "password": "xxx",
+  "username": "xxx",
+  "host": "xxx",
+  "protocol": "ftp",
+  "port": 21,
+  "secure": true,
+  "secureOptions":  {"rejectUnauthorized": false, "secureProtocol" :"TLSv1_2_method"}
+}
+```
 
 ## Error: Failure
 
@@ -25,7 +44,7 @@ Change `remotePath` to the actual path if it's a symlink.
 
 The problem could be that your server runs out of file descriptors.
 You should try to increase the file descriptors limit.
-If you don't have the permission to do this, set [limitOpenFilesOnRemote](https://github.com/Natizyskunk/vscode-sftp/wiki/Configuration#limitopenfilesonremote) option in your config.
+If you don't have the permission to do this, set [limitOpenFilesOnRemote](https://github.com/satiromarra/vscode-sftp/wiki/Configuration#limitopenfilesonremote) option in your config.
 
 ## Error: Connection closed
 
@@ -131,7 +150,7 @@ following:
 
 ## Automatically sync both ways without user interaction
 
-See [vscode-sftp issue #136](https://github.com/Natizyskunk/vscode-sftp/issues/136).
+See [vscode-sftp issue #136](https://github.com/satiromarra/vscode-sftp/issues/136).
 
 > *This can also be used with **GIT** this way when you're checking out a branch or reverting changes/commits, your server will also be updated.*
 

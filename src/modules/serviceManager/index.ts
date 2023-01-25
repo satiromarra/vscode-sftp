@@ -86,10 +86,6 @@ export function getBasePath(context: string, workspace: string) {
 }
 
 export function createFileService(config: any, workspace: string) {
-  if (config.defaultProfile) {
-    app.state.profile = config.defaultProfile;
-  }
-
   const normalizedBasePath = getBasePath(config.context, workspace);
   const service = new FileService(normalizedBasePath, workspace, config);
 

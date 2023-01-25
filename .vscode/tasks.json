@@ -5,26 +5,24 @@
 // ${fileDirname}: the current opened file's dirname
 // ${fileExtname}: the current opened file's extension
 // ${cwd}: the current working directory of the spawned process
-
 // A task runner that calls a custom npm script that compiles the extension.
 {
   "version": "2.0.0",
-
   // we want to run npm
   "command": "npm",
-
   "type": "shell",
-
   "presentation": {
     "reveal": "silent"
   },
-
   // we run the custom script "dev" as defined in package.json
-  "args": ["run", "dev", "--", "--display", "minimal"],
-
+  "args": [
+    "run",
+    "dev",
+    "--",
+    "--no-stats"
+  ],
   // The dev is started in watching mode
   "isBackground": true,
-
   // use the standard tsc in watch mode problem matcher to find compile problems in the output.
   "problemMatcher": {
     "owner": "webpack",
