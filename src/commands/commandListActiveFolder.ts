@@ -1,8 +1,8 @@
 import * as path from 'path';
 import { Uri } from 'vscode';
 import { COMMAND_LIST_ACTIVEFOLDER } from '../constants';
-import { showTextDocument } from '../host';
-import { FileType } from '../core';
+import { showInformationMessage, showTextDocument } from '../host';
+import { FileEntry, FileType } from '../core';
 import { downloadFile, downloadFolder } from '../fileHandlers';
 import { checkCommand } from './abstract/createCommand';
 import { getActiveFolder } from './shared';
@@ -21,7 +21,13 @@ export default checkCommand({
     const ctx = handleCtxFromUri(folderUri);
     const config = ctx.config;
     const remotefs = await ctx.fileService.getRemoteFileSystem(config);
-    const fileEntry = await remotefs.list(ctx.target.remoteFsPath);
+    let fileEntry: FileEntry[] = [];
+    try {
+      fileEntry = await remotefs.list(ctx.target.remoteFsPath);
+    } catch (e) {
+      showInformationMessage(e.message)
+      return;
+    }
     const filter = config.ignore ? file => !config.ignore!(file.fsPath) : undefined;
 
     const listItems = fileEntry.map(file => ({

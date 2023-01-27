@@ -92,6 +92,11 @@
 				}
 			},
 			{
+				"command": "sftp.createConnection",
+				"title": "Create Connection",
+				"category": "SFTP"
+			},
+			{
 				"command": "sftp.openConnectInTerminal",
 				"title": "Open SSH in Terminal",
 				"category": "SFTP"
