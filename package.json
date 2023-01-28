@@ -17,10 +17,10 @@
 		"url": "https://github.com/satiromarra/vscode-sftp.git"
 	},
 	"license": "MIT",
-  "galleryBanner": {
-      "color": "#ffdfbb",
-      "theme": "dark"
-  },
+	"galleryBanner": {
+		"color": "#ffdfbb",
+		"theme": "dark"
+	},
 	"categories": [
 		"Other"
 	],
@@ -523,6 +523,11 @@
 					"group": "navigation",
 					"when": "view == remoteExplorer && viewItem == root"
 				},
+        {
+          "command": "sftp.createConnection",
+          "group": "navigation",
+          "category": "view == remoteExplorer && viewItem == root"
+        },
 				{
 					"command": "sftp.remoteExplorer.editInLocal",
 					"group": "2_files",
@@ -689,6 +694,7 @@
 		"yargs-parser": "^20.2.4"
 	},
 	"dependencies": {
+		"@vscode/webview-ui-toolkit": "^1.2.1",
 		"async": "^3.2.4",
 		"fs-extra": "^10.1.0",
 		"ftp": "^0.3.10",
