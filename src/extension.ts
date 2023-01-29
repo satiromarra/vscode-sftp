@@ -7,7 +7,7 @@ import initCommands from './initCommands';
 import { reportError } from './helper';
 import fileActivityMonitor from './modules/fileActivityMonitor';
 import { tryLoadConfigs } from './modules/config';
-import { getAllFileService, createFileService, disposeFileService } from './modules/serviceManager';
+import { createFileService, disposeAllServices } from './modules/serviceManager';
 import { getWorkspaceFolders, setContextValue } from './host';
 import RemoteExplorer from './modules/remoteExplorer';
 
@@ -52,5 +52,5 @@ export async function activate(context: ExtensionContext) {
 
 export function deactivate() {
   fileActivityMonitor.destroy();
-  getAllFileService().forEach(disposeFileService);
+  disposeAllServices();
 }

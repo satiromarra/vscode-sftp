@@ -63,3 +63,5 @@ export const COMMAND_RENAME_FILE = 'sftp.rename.file';
 export const COMMAND_REMOTE_CHMOD = 'sftp.remote.chmod';
 
 export const COMMAND_CREATE_CONNECTION = 'sftp.createConnection';
+export const COMMAND_DELETE_CONNECTION = 'sftp.deleteConnection';
+export const COMMAND_EDIT_CONNECTION = 'sftp.editConnection';

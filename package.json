@@ -94,6 +94,20 @@
 			{
 				"command": "sftp.createConnection",
 				"title": "Create Connection",
+				"category": "SFTP",
+				"icon": {
+					"light": "resources/light/add.svg",
+					"dark": "resources/dark/add.svg"
+				}
+			},
+			{
+				"command": "sftp.editConnection",
+				"title": "Edit Connection",
+				"category": "SFTP"
+			},
+			{
+				"command": "sftp.deleteConnection",
+				"title": "Delete Connection",
 				"category": "SFTP"
 			},
 			{
@@ -292,6 +306,10 @@
 				},
 				{
 					"command": "sftp.openConnectInTerminal",
+					"when": "sftp.enabled"
+				},
+				{
+					"command": "sftp.createConnection",
 					"when": "sftp.enabled"
 				},
 				{
@@ -515,6 +533,11 @@
 					"command": "sftp.setProfile",
 					"when": "view == remoteExplorer",
 					"group": "navigation"
+				},
+				{
+					"command": "sftp.createConnection",
+					"when": "view == remoteExplorer",
+					"group": "navigation"
 				}
 			],
 			"view/item/context": [
@@ -524,9 +547,14 @@
 					"when": "view == remoteExplorer && viewItem == root"
 				},
         {
-          "command": "sftp.createConnection",
-          "group": "navigation",
-          "category": "view == remoteExplorer && viewItem == root"
+          "command": "sftp.deleteConnection",
+          "group": "2_navigation",
+          "when": "view == remoteExplorer && viewItem == root"
+        },
+        {
+          "command": "sftp.editConnection",
+          "group": "2_navigation",
+          "when": "view == remoteExplorer && viewItem == root"
         },
 				{
 					"command": "sftp.remoteExplorer.editInLocal",

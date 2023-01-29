@@ -4,7 +4,9 @@ import * as path from 'path';
 import * as Joi from 'joi';
 import { CONFIG_PATH } from '../constants';
 import { reportError } from '../helper';
-import { showTextDocument } from '../host';
+import { showErrorMessage, showInformationMessage, showTextDocument } from '../host';
+import { createFileService, disposeAllServices } from './serviceManager';
+import app from '../app';
 
 const nullable = schema => schema.optional().allow(null);
 
@@ -196,4 +198,32 @@ export function newConfig(basePath) {
         .then(() => showTextDocument(vscode.Uri.file(configPath)));
     })
     .catch(reportError);
+}
+
+
+export function saveNewConfiguration(configPath: string, configJson) {
+  // dispose old service
+  disposeAllServices();
+  fse.outputJson(
+    configPath,
+    configJson,
+    { spaces: 4 }
+  ).then((val) => {
+    showInformationMessage("Saved settings!");
+    const uri = vscode.Uri.file(configPath);
+    const workspaceFolder = vscode.workspace.getWorkspaceFolder(uri);
+    if (!workspaceFolder) {
+      return;
+    }
+    const workspacePath = workspaceFolder.uri.fsPath;
+    // create new service
+    readConfigsFromFile(uri.fsPath).then((cnf) => {
+      cnf.forEach((config) => {
+        createFileService(config, workspacePath);
+      });
+      app.remoteExplorer.refresh();
+    });
+  }).catch((e) => {
+    showErrorMessage(e);
+  });
 }

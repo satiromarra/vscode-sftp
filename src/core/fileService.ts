@@ -364,7 +364,9 @@ enum Event {
   AFTER_TRANSFER = 'AFTER_TRANSFER',
 }
 
-let id = 0;
+export let idFsCounter = {
+  id: 0
+};
 
 export default class FileService {
   private _eventEmitter: EventEmitter = new EventEmitter();
@@ -392,7 +394,7 @@ export default class FileService {
     if (baseDir.slice(-1) == path.sep) {
       baseDir = baseDir.slice(0, -1);
     }
-    this.id = ++id;
+    this.id = ++idFsCounter.id;
     this.workspace = workspace;
     this._baseDir = baseDir;
     this._watcherConfig = config.watcher;

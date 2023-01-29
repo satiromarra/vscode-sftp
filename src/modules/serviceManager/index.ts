@@ -7,6 +7,7 @@ import { UResource, FileService, TransferTask } from '../../core';
 import { validateConfig } from '../config';
 import watcherService from '../fileWatcher';
 import Trie from './trie';
+import { idFsCounter } from '../../core/fileService';
 
 const WIN_DRIVE_REGEX = /^([a-zA-Z]):/;
 const isWindows = process.platform === 'win32';
@@ -156,6 +157,12 @@ export function getAllFileService(): FileService[] {
   }
 
   return serviceManager.getAllValues();
+}
+
+export function disposeAllServices() {
+  getAllFileService().forEach(disposeFileService);
+  serviceManager.empty();
+  idFsCounter.id = 0;
 }
 
 export function getRunningTransformTasks(): TransferTask[] {
