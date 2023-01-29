@@ -47,7 +47,7 @@ async function loadCommands(requireContext, nameRegex, commandCreator, context: 
       .replace(/\.\w+$/, '');
 
     const match = nameRegex.exec(clearName);
-    console.log([clearName, match]);
+    // console.log([clearName, match]);
     if (!match || !match[1]) {
       logger.warn(`Command name not found from ${fileName}`);
       return;
@@ -56,7 +56,7 @@ async function loadCommands(requireContext, nameRegex, commandCreator, context: 
     const commandOption = requireContext(fileName).default;
     commandOption.name = nomalizeCommandName(match[1]);
 
-    console.log(commandOption.name);
+    // console.log(commandOption.name);
     try {
       // tslint:disable-next-line variable-name
       const Cmd = commandCreator(commandOption);

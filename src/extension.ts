@@ -1,7 +1,7 @@
 'use strict';
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import { ExtensionContext, WorkspaceFolder } from 'vscode';
 import app from './app';
 import initCommands from './initCommands';
 import { reportError } from './helper';
@@ -18,7 +18,7 @@ async function setupWorkspaceFolder(dir) {
   });
 }
 
-function setup(workspaceFolders: vscode.WorkspaceFolder[]) {
+function setup(workspaceFolders: WorkspaceFolder[]) {
   fileActivityMonitor.init();
   const pendingInits = workspaceFolders.map(folder => setupWorkspaceFolder(folder.uri.fsPath));
 
@@ -27,7 +27,8 @@ function setup(workspaceFolders: vscode.WorkspaceFolder[]) {
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
-export async function activate(context: vscode.ExtensionContext) {
+export async function activate(context: ExtensionContext) {
+  app.ctx = context;
   try {
     initCommands(context);
   } catch (error) {

@@ -1,4 +1,5 @@
 import * as LRU from 'lru-cache';
+import { ExtensionContext } from 'vscode';
 import StatusBarItem from './ui/statusBarItem';
 import { COMMAND_SET_PROFILE } from './constants';
 import AppState from './modules/appState';
@@ -7,6 +8,7 @@ import RemoteExplorer from './modules/remoteExplorer';
 interface App {
   fsCache: LRU.Cache<string, string>;
   state: AppState;
+  ctx: ExtensionContext,
   sftpBarItem: StatusBarItem;
   remoteExplorer: RemoteExplorer;
 }
