@@ -5,13 +5,16 @@
 const path = require('path');
 
 /**@type {import('webpack').Configuration}*/
+
 const config = {
   target: 'node',
-
-  entry: './src/extension.ts',
+  entry: {
+    'extension': './src/extension.ts',
+    'webview': './src/webview/main.ts',
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'extension.js',
+    filename: '[name].js',
     libraryTarget: 'commonjs2',
     devtoolModuleFilenameTemplate: '../[resource-path]',
   },
@@ -24,17 +27,13 @@ const config = {
     extensions: ['.ts', '.js'],
   },
   module: {
-    rules: [
-      {
-        test: /\.ts$/,
-        exclude: /node_modules/,
-        use: [
-          {
-            loader: 'ts-loader',
-          },
-        ],
-      },
-    ],
+    rules: [{
+      test: /\.ts$/,
+      exclude: /node_modules/,
+      use: [{
+        loader: 'ts-loader',
+      }, ],
+    }, ],
   },
 };
 
