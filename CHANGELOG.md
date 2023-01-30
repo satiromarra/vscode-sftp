@@ -1,3 +1,6 @@
+## 1.16.7 - 2023-01-30
+* Create/Edit connections with User Interface
+
 ## 1.16.4 - 2023-01-24
 * Download files and folders as another name
 * Fix paths into watcher

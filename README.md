@@ -21,6 +21,7 @@ VSCode-SFTP enables you to add, edit or delete files within a local directory an
   - (new) Multiple configurations with multiples profiles
   - (new) Change remote permission in folder and files
   - (new) Download files and folders as another name
+  - (new) Create/Edit connections with User Interface
 - [Commands](https://github.com/satiromarra/vscode-sftp/wiki/Commands)
 - [Debug](#debug)
 - [FAQ](#FAQ)
@@ -49,6 +50,22 @@ To install just follow these steps from within VSCode:
 - [SFTP configuration](https://github.com/satiromarra/vscode-sftp/wiki/SFTP-only-Configuration)
 - [FTP confriguration](https://github.com/satiromarra/vscode-sftp/wiki/FTP(s)-only-Configuration)
 - [Commands](https://github.com/satiromarra/vscode-sftp/wiki/Commands)
+
+## User Interface
+- Create connection
+<img src="./assets/showcase/create-connection.png" width="350"/>
+
+- Form new connection
+<img src="./assets/showcase/form-new-connection.png" width="350"/>
+
+- Edit connection
+<img src="./assets/showcase/edit-connection.png" width="350"/>
+
+- Delete connection
+<img src="./assets/showcase/delete-connection.png" width="350"/>
+
+- Confirm delete
+<img src="./assets/showcase/confirm-delete-connection.png" width="350"/>
 
 ## Usage
 If the latest files are already on a remote server, you can start with an empty local folder,
