@@ -138,7 +138,7 @@ function profileBox(profileName, profile) {
   divi.appendChild(tfProfileID);
   const tfProfileName = getTextField('Name', profile.name || '', 'profile-name');
   divi.appendChild(tfProfileName);
-  const tfProfileContext = getTextField('Context', profile.context || '', 'profile-context');
+  const tfProfileContext = getTextField('Local folder', profile.context || '', 'profile-context');
   divi.appendChild(tfProfileContext);
   const tfHostname = getTextField('Hostname', profile.host || '', 'profile-host');
   divi.appendChild(tfHostname);
@@ -181,12 +181,18 @@ function saveConfig() {
   const password = doc.getElementById("password") as TextField;
   const context = doc.getElementById("context") as TextField;
   const ignore = doc.getElementById("ignore") as TextField;
+  const ignoreRemote = doc.getElementById("ignoreRemote") as TextField;
   const remotePath = doc.getElementById("remotePath") as TextField;
   const privateKeyPath = doc.getElementById("privateKeyPath") as TextField;
   const passphrase = doc.getElementById("passphrase") as TextField;
   const secure = doc.getElementById("secure") as TextField;
 
+  const watcherFiles = doc.getElementById("watcherFiles") as TextField;
+  const watcherAutoUpload = doc.getElementById("watcherAutoUpload") as RadioGroup;
+  const watcherAutoDelete = doc.getElementById("watcherAutoDelete") as RadioGroup;
+
   const ignoreValue = ignore?.value;
+  const ignoreRemoteValue = ignoreRemote?.value;
   const privateKeyPathValue = privateKeyPath?.value;
 
   let configToUpdate = {
@@ -204,6 +210,18 @@ function saveConfig() {
     remotePath: remotePath?.value,
     //privateKeyPath: privateKeyPath?.value,
   };
+  if (watcherFiles?.value.length) {
+    configToUpdate["watcher"] = {
+      files: watcherFiles.value,
+      autoUpload: parseInt(watcherAutoUpload.value) == 1,
+      autoDelete: parseInt(watcherAutoDelete.value) == 1,
+    };
+  }
+  if (ignoreRemoteValue.length) {
+    configToUpdate["remoteExplorer"] = {
+      filesExclude: ignoreRemoteValue.length ? ignoreRemoteValue.split(",").map((tag) => tag.trim()) : [],
+    };
+  }
   if (password?.value.length) {
     configToUpdate['password'] = password.value;
   }

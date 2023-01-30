@@ -15,7 +15,16 @@ export default checkCommand({
       remotePath: "~/",
       uploadOnSave: true,
       useTempFile: true,
-      ignore: [".vscode", ".git", ".DS_Store", ".github/**", ".ci"]
+      ignore: [".vscode", ".git", ".DS_Store", ".github/**", ".ci"],
+      remoteExplorer: {
+        filesExclude: [".git", ".vscode", ".github"]
+      },
+      profiles: {},
+      watcher: {
+        files: "**/*",
+        autoUpload: true,
+        autoDelete: false
+      }
     }) as FileServiceConfig;
 
     (new Settings()).show(newConfig);

@@ -33,6 +33,10 @@ export default class Settings {
         localResourceRoots: [Uri.file(path.join(context.extensionPath, "dist"))]
       });
     }
+    panel.iconPath = {
+      light: Uri.file(path.join(context.extensionPath, 'resources', 'light', 'remote-explorer.svg')),
+      dark: Uri.file(path.join(context.extensionPath, 'resources', 'dark', 'remote-explorer.svg'))
+    }
     panel.title = remoteConfig.name || remoteConfig.context || '';
     panel.webview.html = getWebviewContent(panel.webview, context.extensionPath, (remoteConfig || {}) as FileServiceConfig, fileService);
     panel.webview.onDidReceiveMessage((message) => {
