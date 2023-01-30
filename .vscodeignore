@@ -3,6 +3,8 @@
 **/.DS_Store
 !node_modules/**/*
 !dist/extension.js
+!dist/webview.js
+!dist/style.css
 !package.json
 !README.md
 !CHANGELOG.md

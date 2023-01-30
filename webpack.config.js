@@ -10,7 +10,7 @@ const config = {
   target: 'node',
   entry: {
     'extension': './src/extension.ts',
-    'webview': './src/webview/main.ts',
+    //'webview': './src/webview/main.ts',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),

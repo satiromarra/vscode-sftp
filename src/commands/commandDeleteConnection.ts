@@ -42,7 +42,7 @@ export default checkCommand({
     }
 
     let configPath = path.join(workspaces[0].uri.fsPath, CONFIG_PATH);
-    const result = await showConfirmMessage(
+    await showConfirmMessage(
       `Are you sure you want to delete '${fileService.name}'?`,
       'Delete',
       'Cancel'

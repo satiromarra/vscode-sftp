@@ -724,6 +724,8 @@
 	"dependencies": {
 		"@vscode/webview-ui-toolkit": "^1.2.1",
 		"async": "^3.2.4",
+		"esbuild": "^0.16.10",
+		"esbuild-plugin-copy": "^2.0.1",
 		"fs-extra": "^10.1.0",
 		"ftp": "^0.3.10",
 		"ignore": "^5.1.4",
