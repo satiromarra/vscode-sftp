@@ -44,6 +44,9 @@ export default checkCommand({
     }
     let configPath = path.join(workspaces[0].uri.fsPath, CONFIG_PATH);
     let configJson = await fse.readJson(configPath);
+    if (!Array.isArray(configJson)) {
+      configJson = [configJson];
+    }
     const remotes = configJson.filter((e) => {
       return e.name == fileService.name;
     });

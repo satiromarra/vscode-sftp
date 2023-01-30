@@ -51,6 +51,9 @@ export default checkCommand({
         return
       }
       let configJson = fse.readJsonSync(configPath);
+      if (!Array.isArray(configJson)) {
+        configJson = [configJson];
+      }
       const remotes = configJson.filter((e) => {
         return e.name !== fileService.name;
       });

@@ -44,9 +44,11 @@ export default class Settings {
       const id = message.id;
       const config = message.config;
       const error = message.error;
-      console.log({ command, id });
       let configPath = path.join(workspaces[0].uri.fsPath, CONFIG_PATH);
       let configJson = fse.readJsonSync(configPath);
+      if (!Array.isArray(configJson)) {
+        configJson = [configJson];
+      }
       switch (command) {
         case "errorConfig":
           showErrorMessage(error);

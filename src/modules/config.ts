@@ -182,7 +182,7 @@ export function newConfig(basePath) {
       return fse
         .outputJson(
           configPath,
-          {
+          [{
             name: 'My Server',
             host: 'localhost',
             protocol: 'sftp',
@@ -192,7 +192,7 @@ export function newConfig(basePath) {
             uploadOnSave: false,
             useTempFile: false,
             openSsh: false,
-          },
+          }],
           { spaces: 4 }
         )
         .then(() => showTextDocument(vscode.Uri.file(configPath)));
