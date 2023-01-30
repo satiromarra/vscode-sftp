@@ -2,7 +2,7 @@
 	"name": "code-sftp",
 	"displayName": "SFTP",
 	"description": "SFTP/FTP sync",
-	"version": "1.16.6",
+	"version": "1.16.7",
 	"publisher": "satiromarra",
 	"author": "satiromarra (https://github.com/satiromarra)",
 	"engines": {
@@ -546,16 +546,16 @@
 					"group": "navigation",
 					"when": "view == remoteExplorer && viewItem == root"
 				},
-        {
-          "command": "sftp.deleteConnection",
-          "group": "2_navigation",
-          "when": "view == remoteExplorer && viewItem == root"
-        },
-        {
-          "command": "sftp.editConnection",
-          "group": "2_navigation",
-          "when": "view == remoteExplorer && viewItem == root"
-        },
+				{
+					"command": "sftp.deleteConnection",
+					"group": "2_navigation",
+					"when": "view == remoteExplorer && viewItem == root"
+				},
+				{
+					"command": "sftp.editConnection",
+					"group": "2_navigation",
+					"when": "view == remoteExplorer && viewItem == root"
+				},
 				{
 					"command": "sftp.remoteExplorer.editInLocal",
 					"group": "2_files",
