@@ -61,10 +61,10 @@ async function loadCommands(requireContext, nameRegex, commandCreator, context: 
       // tslint:disable-next-line variable-name
       const Cmd = commandCreator(commandOption);
       const cmdInstance: Command = new Cmd();
-      console.log(`register command "${commandOption.name}" from "${fileName}"`);
+      // console.log(`register command "${commandOption.name}" from "${fileName}"`);
       registerCommand(context, commandOption.id, cmdInstance.run, cmdInstance);
     } catch (error) {
-      console.log([error, `load command "${fileName}"`]);
+      // console.log([error, `load command "${fileName}"`]);
     }
   });
 }

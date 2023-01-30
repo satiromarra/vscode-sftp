@@ -31,7 +31,7 @@ export default checkFileCommand({
     await remoteFs.lstat(targets.fsPath).then((value) => {
       this.options.mode = value.mode;
     }).catch((err) => {
-      console.log(err)
+      // console.log(err)
     });
     const result = await window.showInputBox({
       value: this.options.mode.toString(8),

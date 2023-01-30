@@ -281,6 +281,6 @@ function saveConfig() {
   });
   configToUpdate["profiles"] = newProfiles;
   let command = (configID && configID.length > 0) ? 'updateConfig' : 'saveConfig';
-  console.log({ configToUpdate });
+  // console.log({ configToUpdate });
   vscode.postMessage({ command: command, id: configID, config: configToUpdate });
 }
