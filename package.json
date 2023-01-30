@@ -2,7 +2,7 @@
 	"name": "code-sftp",
 	"displayName": "SFTP",
 	"description": "SFTP/FTP sync",
-	"version": "1.16.7",
+	"version": "1.16.8",
 	"publisher": "satiromarra",
 	"author": "satiromarra (https://github.com/satiromarra)",
 	"engines": {
