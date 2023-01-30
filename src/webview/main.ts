@@ -12,6 +12,8 @@ import {
   vsCodePanels,
   vsCodePanelTab,
   vsCodePanelView,
+  vsCodeDropdown,
+  vsCodeOption
 } from "@vscode/webview-ui-toolkit";
 
 provideVSCodeDesignSystem().register(
@@ -24,6 +26,8 @@ provideVSCodeDesignSystem().register(
   vsCodePanels(),
   vsCodePanelView(),
   vsCodePanelTab(),
+  vsCodeDropdown(),
+  vsCodeOption(),
 );
 
 const doc = document;
@@ -49,9 +53,15 @@ function main() {
 
   const protocols = doc.getElementById("protocol") as RadioGroup;
   protocols.addEventListener("change", function () {
-    //(doc.getElementById("privateKeyPath") as TextField).disabled = (this.value != 'sftp');
+    toggleProtocol(this.value);
   });
+  toggleProtocol(protocols.value);
+}
 
+function toggleProtocol(val) {
+  (doc.getElementById("privateKeyPath") as TextField).parentNode.parentNode.style.display = (val != 'sftp') ? 'none' : 'flex';
+  (doc.getElementById("passphrase") as TextField).parentNode.parentNode.style.display = (val != 'sftp') ? 'none' : 'flex';
+  (doc.getElementById("secure") as TextField).parentNode.parentNode.style.display = (val == 'sftp') ? 'none' : 'flex';
 }
 
 let openedConfig, configID: string = '';
@@ -151,6 +161,15 @@ function getItemFromRow(item, n) {
   return item.childNodes[n].childNodes[1].childNodes[0];
 }
 
+function getItemsFromRow(bloc) {
+  const pos = ['id', 'name', 'context', 'host', 'port', 'user', 'pass', 'remote'];
+  let data = { id: '', name: '', context: '', host: '', port: '', user: '', pass: '', remote: '' };
+  pos.forEach((v, k) => {
+    data[v] = getItemFromRow(bloc, k).value;
+  });
+  return data;
+}
+
 function saveConfig() {
   const name = doc.getElementById("name") as TextField;
   const host = doc.getElementById("host") as TextField;
@@ -165,6 +184,7 @@ function saveConfig() {
   const remotePath = doc.getElementById("remotePath") as TextField;
   const privateKeyPath = doc.getElementById("privateKeyPath") as TextField;
   const passphrase = doc.getElementById("passphrase") as TextField;
+  const secure = doc.getElementById("secure") as TextField;
 
   const ignoreValue = ignore?.value;
   const privateKeyPathValue = privateKeyPath?.value;
@@ -194,6 +214,14 @@ function saveConfig() {
     if (passphrase.length > 0) {
       configToUpdate['passphrase'] = passphrase;
     }
+  } else {
+    if (secure.value.length > 0 && secure.value != 'false') {
+      if (secure.value == 'true') {
+        configToUpdate['secure'] = true;
+      } else {
+        configToUpdate['secure'] = secure.value;
+      }
+    }
   }
   if (!configToUpdate.name || !configToUpdate.username) {
     vscode.postMessage({ command: "errorConfig", error: "Invalid data" });
@@ -203,39 +231,31 @@ function saveConfig() {
   profilesDiv.childNodes.forEach((item) => {
     let newObj = {};
     let oldName = item.getAttribute('data-name');
-    let bloc = item.childNodes[0];
-    let pId = getItemFromRow(bloc, 0).value;
-    let pName = getItemFromRow(bloc, 1).value;
-    let pContext = getItemFromRow(bloc, 2).value;
-    let pHost = getItemFromRow(bloc, 3).value;
-    let pPort = getItemFromRow(bloc, 4).value;
-    let pUser = getItemFromRow(bloc, 5).value;
-    let pPass = getItemFromRow(bloc, 6).value;
-    let pRemote = getItemFromRow(bloc, 7).value;
+    let pData = getItemsFromRow(item.childNodes[0]);
 
-    if (pId) {
-      if (pName.length) {
-        newObj["name"] = pName;
+    if (pData.id) {
+      if (pData.name.length) {
+        newObj["name"] = pData.name;
       }
-      if (pContext.length) {
-        newObj["context"] = pContext;
+      if (pData.context.length) {
+        newObj["context"] = pData.context;
       }
-      if (pHost.length) {
-        newObj["host"] = pHost;
+      if (pData.host.length) {
+        newObj["host"] = pData.host;
       }
-      if (pPort.length) {
-        newObj["port"] = pPort;
+      if (pData.port.length) {
+        newObj["port"] = pData.port;
       }
-      if (pUser.length) {
-        newObj["username"] = pUser;
+      if (pData.user.length) {
+        newObj["username"] = pData.user;
       }
-      if (pPass.length) {
-        newObj["password"] = pPass;
+      if (pData.pass.length) {
+        newObj["password"] = pData.pass;
       }
-      if (pRemote.length) {
-        newObj["remotePath"] = pRemote;
+      if (pData.remote.length) {
+        newObj["remotePath"] = pData.remote;
       }
-      newProfiles[pId] = {
+      newProfiles[pData.id] = {
         ...(openedConfig.profiles[oldName] || {}),
         ...newObj
       };

@@ -67,6 +67,15 @@ export function getWebviewContent(webview: Webview, extensionPath: string, confi
                   <vscode-radio value="ftp" ${config.protocol != 'sftp' ? 'checked' : ''}>FTP</vscode-radio>
                 </vscode-radio-group></span>
               </div>
+              <div class="form-row" style="display: none;">
+                <span class="title">Secure</span>
+                <span class="field"><vscode-dropdown id="secure">
+                  <vscode-option value="false" ${(config.secure == false || config.secure == undefined) ? 'checked' : ''}>Default</vscode-option>
+                  <vscode-option value="true" ${(config.secure == true) ? 'checked' : ''}>Both</vscode-option>
+                  <vscode-option value="control" ${config.secure == 'control' ? 'checked' : ''}>Control</vscode-option>
+                  <vscode-option value="implicit" ${config.secure == 'implicit' ? 'checked' : ''}>Implicit</vscode-option>
+                </vscode-dropdown></span>
+              </div>
               <div class="form-row">
                 <span class="title">Host</span>
                 <span class="field"><vscode-text-field id="host" value="${config.host || ''}" placeholder=""></vscode-text-field></span>
@@ -84,12 +93,12 @@ export function getWebviewContent(webview: Webview, extensionPath: string, confi
                 <span class="field"><vscode-text-field id="password" value="${config.password || ''}" placeholder=""></vscode-text-field></span>
               </div>
               <div class="form-row">
-                <span class="title">Local path</span>
-                <span class="field"><vscode-text-field id="context"value="${config.context || ''}" placeholder=""></vscode-text-field></span>
-              </div>
-              <div class="form-row">
                 <span class="title">Remote path</span>
                 <span class="field"><vscode-text-field id="remotePath"value="${config.remotePath || ''}" placeholder=""></vscode-text-field></span>
+              </div>
+              <div class="form-row">
+                <span class="title">Local path</span>
+                <span class="field"><vscode-text-field id="context"value="${config.context || ''}" placeholder=""></vscode-text-field></span>
               </div>
               <vscode-divider></vscode-divider>
               <div class="form-row">
