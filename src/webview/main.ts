@@ -32,6 +32,7 @@ provideVSCodeDesignSystem().register(
 
 const doc = document;
 const win = window;
+// @ts-ignore
 const vscode = acquireVsCodeApi();
 
 win.addEventListener("load", main);
@@ -53,19 +54,19 @@ function main() {
 
   const protocols = doc.getElementById("protocol") as RadioGroup;
   protocols.addEventListener("change", function () {
-    toggleProtocol(this.value);
+    toggleProtocol((this as HTMLInputElement).value);
   });
   toggleProtocol(protocols.value);
 }
 
 function toggleProtocol(val) {
-  (doc.getElementById("privateKeyPath") as TextField).parentNode.parentNode.style.display = (val != 'sftp') ? 'none' : 'flex';
-  (doc.getElementById("passphrase") as TextField).parentNode.parentNode.style.display = (val != 'sftp') ? 'none' : 'flex';
-  (doc.getElementById("secure") as TextField).parentNode.parentNode.style.display = (val == 'sftp') ? 'none' : 'flex';
+  ((doc.getElementById("privateKeyPath") as TextField).parentNode!.parentNode as HTMLElement).style.display = (val != 'sftp') ? 'none' : 'flex';
+  ((doc.getElementById("passphrase") as TextField).parentNode!.parentNode as HTMLElement).style.display = (val != 'sftp') ? 'none' : 'flex';
+  ((doc.getElementById("secure") as TextField).parentNode!.parentNode as HTMLElement).style.display = (val == 'sftp') ? 'none' : 'flex';
 }
 
 let openedConfig, configID: string = '';
-const profilesDiv = doc.getElementById('profiles-items');
+const profilesDiv = doc.getElementById('profiles-items')!;
 
 function setVSCodeMessageListener() {
   win.addEventListener("message", (event) => {
@@ -98,8 +99,8 @@ function getButton(label) {
   const button = doc.createElement('vscode-button') as Button;
   button.innerHTML = label;
   button.addEventListener("click", function () {
-    let pr1 = this.parentNode.parentNode;
-    let pr2 = pr1.parentNode;
+    let pr1 = this.parentNode!.parentNode!;
+    let pr2 = pr1!.parentNode!;
     pr2.removeChild(pr1);
   });
   return button;
@@ -132,7 +133,9 @@ function profileBox(profileName, profile) {
   let divi = doc.createElement("div");
   divi.className = 'block-fields';
   let divb = doc.createElement("div");
-  divb.style = 'padding: 8px 0px;width: 50px;text-align: center;';
+  (divb as HTMLElement).style.padding = '8px 0px';
+  (divb as HTMLElement).style.width = '50px';
+  (divb as HTMLElement).style.textAlign = 'center';
 
   const tfProfileID = getTextField('ID', profileName, 'profile-id');
   divi.appendChild(tfProfileID);
@@ -229,7 +232,7 @@ function saveConfig() {
     if (privateKeyPathValue.length > 0) {
       configToUpdate['privateKeyPath'] = privateKeyPathValue;
     }
-    if (passphrase.length > 0) {
+    if (passphrase.value.length > 0) {
       configToUpdate['passphrase'] = passphrase;
     }
   } else {
@@ -246,9 +249,9 @@ function saveConfig() {
     return;
   }
   let newProfiles = {};
-  profilesDiv.childNodes.forEach((item) => {
+  profilesDiv.childNodes.forEach((item: HTMLElement) => {
     let newObj = {};
-    let oldName = item.getAttribute('data-name');
+    let oldName = item.getAttribute('data-name') as string;
     let pData = getItemsFromRow(item.childNodes[0]);
 
     if (pData.id) {
@@ -284,3 +287,4 @@ function saveConfig() {
   // console.log({ configToUpdate });
   vscode.postMessage({ command: command, id: configID, config: configToUpdate });
 }
+

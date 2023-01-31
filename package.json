@@ -2,7 +2,7 @@
 	"name": "code-sftp",
 	"displayName": "SFTP",
 	"description": "SFTP/FTP sync",
-	"version": "1.16.9",
+	"version": "1.17.0",
 	"publisher": "satiromarra",
 	"author": "satiromarra (https://github.com/satiromarra)",
 	"engines": {
@@ -19,7 +19,7 @@
 	"license": "MIT",
 	"galleryBanner": {
 		"color": "#ffdfbb",
-		"theme": "dark"
+    "theme": "light"
 	},
 	"categories": [
 		"Other"
@@ -113,7 +113,11 @@
 			{
 				"command": "sftp.openConnectInTerminal",
 				"title": "Open SSH in Terminal",
-				"category": "SFTP"
+				"category": "SFTP",
+        "icon": {
+          "dark": "resources/dark/terminal.svg",
+          "light": "resources/light/terminal.svg"
+        }
 			},
 			{
 				"command": "sftp.cancelAllTransfer",
@@ -162,7 +166,11 @@
 			{
 				"command": "sftp.download.file",
 				"title": "Download File",
-				"category": "SFTP"
+				"category": "SFTP",
+        "icon": {
+          "dark": "resources/dark/download-file.svg",
+          "light": "resources/light/download-file.svg"
+        }
 			},
 			{
 				"command": "sftp.download.fileAs",
@@ -177,7 +185,11 @@
 			{
 				"command": "sftp.download.folder",
 				"title": "Download Folder",
-				"category": "SFTP"
+				"category": "SFTP",
+        "icon": {
+          "dark": "resources/dark/download-folder.svg",
+          "light": "resources/light/download-folder.svg"
+        }
 			},
 			{
 				"command": "sftp.download.folderAs",
@@ -547,6 +559,11 @@
 					"when": "view == remoteExplorer && viewItem == root"
 				},
 				{
+					"command": "sftp.openConnectInTerminal",
+					"group": "inline",
+					"when": "view == remoteExplorer && viewItem == root"
+				},
+				{
 					"command": "sftp.deleteConnection",
 					"group": "2_navigation",
 					"when": "view == remoteExplorer && viewItem == root"
@@ -599,6 +616,11 @@
 					"when": "sftp.enabled && view == remoteExplorer && viewItem != file"
 				},
 				{
+					"command": "sftp.download.folder",
+					"group": "inline",
+					"when": "sftp.enabled && view == remoteExplorer && viewItem != file && viewItem != root"
+				},
+				{
 					"command": "sftp.download.folderAs",
 					"group": "3_trans@2",
 					"when": "sftp.enabled && view == remoteExplorer && viewItem != file && !listMultiSelection"
@@ -606,6 +628,11 @@
 				{
 					"command": "sftp.download.file",
 					"group": "3_trans@2",
+					"when": "view == remoteExplorer && viewItem != root && viewItem == file"
+				},
+				{
+					"command": "sftp.download.file",
+					"group": "inline",
 					"when": "view == remoteExplorer && viewItem != root && viewItem == file"
 				},
 				{

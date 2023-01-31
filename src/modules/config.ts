@@ -2,9 +2,9 @@ import * as vscode from 'vscode';
 import * as fse from 'fs-extra';
 import * as path from 'path';
 import * as Joi from 'joi';
-import { CONFIG_PATH } from '../constants';
+import { COMMAND_CREATE_CONNECTION, CONFIG_PATH } from '../constants';
 import { reportError } from '../helper';
-import { showErrorMessage, showInformationMessage, showTextDocument } from '../host';
+import { executeCommand, showErrorMessage, showInformationMessage, showTextDocument } from '../host';
 import { createFileService, disposeAllServices } from './serviceManager';
 import app from '../app';
 
@@ -171,31 +171,18 @@ export function tryLoadConfigs(workspace): Promise<any[]> {
 
 export function newConfig(basePath) {
   const configPath = getConfigPath(basePath);
-
   return fse
     .pathExists(configPath)
     .then(exist => {
       if (exist) {
-        return showTextDocument(vscode.Uri.file(configPath));
+        showTextDocument(vscode.Uri.file(configPath));
+        return;
       }
-
       return fse
-        .outputJson(
-          configPath,
-          [{
-            name: 'My Server',
-            host: 'localhost',
-            protocol: 'sftp',
-            port: 22,
-            username: 'username',
-            remotePath: '/',
-            uploadOnSave: false,
-            useTempFile: false,
-            openSsh: false,
-          }],
-          { spaces: 4 }
-        )
-        .then(() => showTextDocument(vscode.Uri.file(configPath)));
+        .outputJson(configPath, [], { spaces: 4 })
+        .then(() => {
+          executeCommand(COMMAND_CREATE_CONNECTION);
+        });
     })
     .catch(reportError);
 }

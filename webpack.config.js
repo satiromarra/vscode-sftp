@@ -10,13 +10,13 @@ const config = {
   target: 'node',
   entry: {
     'extension': './src/extension.ts',
-    //'webview': './src/webview/main.ts',
+    'webview': './src/webview/main.ts',
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: '[name].js',
     libraryTarget: 'commonjs2',
-    devtoolModuleFilenameTemplate: '../[resource-path]',
+    devtoolModuleFilenameTemplate: '../[resource-path]'
   },
   devtool: 'source-map',
   externals: {
