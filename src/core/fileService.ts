@@ -372,7 +372,7 @@ export default class FileService {
   private _eventEmitter: EventEmitter = new EventEmitter();
   private _name: string;
   private _watcherConfig: WatcherConfig;
-  private _profiles: string[];
+  private _profiles: string[] = [];
   private _activeProfile: string | null;
   private _pendingTransferTasks: Set<TransferTask> = new Set();
   private _transferSchedulers: TransferScheduler[] = [];
@@ -431,7 +431,7 @@ export default class FileService {
   }
 
   get baseDir(): string {
-    if (!this._profiles) {
+    if (this._profiles.length < 1) {
       return this._baseDir;
     }
     if (this._activeProfile && this._profiles.indexOf(this._activeProfile) > -1) {
@@ -465,7 +465,7 @@ export default class FileService {
   }
 
   getAvaliableProfiles(): BaseProfile[] {
-    if (!this._profiles) {
+    if (this._profiles.length < 1) {
       return [];
     }
     let prf: BaseProfile[] = [];
@@ -476,8 +476,6 @@ export default class FileService {
       });
     });
     return prf;
-    // console.log(prf);
-    // return this._profiles || [];
   }
 
   getPendingTransferTasks(): TransferTask[] {
