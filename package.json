@@ -19,7 +19,7 @@
 	"license": "MIT",
 	"galleryBanner": {
 		"color": "#ffdfbb",
-    "theme": "light"
+		"theme": "light"
 	},
 	"categories": [
 		"Other"
@@ -114,10 +114,10 @@
 				"command": "sftp.openConnectInTerminal",
 				"title": "Open SSH in Terminal",
 				"category": "SFTP",
-        "icon": {
-          "dark": "resources/dark/terminal.svg",
-          "light": "resources/light/terminal.svg"
-        }
+				"icon": {
+					"dark": "resources/dark/terminal.svg",
+					"light": "resources/light/terminal.svg"
+				}
 			},
 			{
 				"command": "sftp.cancelAllTransfer",
@@ -167,10 +167,10 @@
 				"command": "sftp.download.file",
 				"title": "Download File",
 				"category": "SFTP",
-        "icon": {
-          "dark": "resources/dark/download-file.svg",
-          "light": "resources/light/download-file.svg"
-        }
+				"icon": {
+					"dark": "resources/dark/download-file.svg",
+					"light": "resources/light/download-file.svg"
+				}
 			},
 			{
 				"command": "sftp.download.fileAs",
@@ -186,10 +186,10 @@
 				"command": "sftp.download.folder",
 				"title": "Download Folder",
 				"category": "SFTP",
-        "icon": {
-          "dark": "resources/dark/download-folder.svg",
-          "light": "resources/light/download-folder.svg"
-        }
+				"icon": {
+					"dark": "resources/dark/download-folder.svg",
+					"light": "resources/light/download-folder.svg"
+				}
 			},
 			{
 				"command": "sftp.download.folderAs",
@@ -275,19 +275,19 @@
 				"command": "sftp.rename.file",
 				"title": "Rename File",
 				"category": "SFTP",
-        "icon": {
-          "dark": "resources/dark/rename.svg",
-          "light": "resources/light/rename.svg"
-        }
+				"icon": {
+					"dark": "resources/dark/rename.svg",
+					"light": "resources/light/rename.svg"
+				}
 			},
 			{
 				"command": "sftp.rename.folder",
 				"title": "Rename Folder",
 				"category": "SFTP",
-        "icon": {
-          "dark": "resources/dark/rename.svg",
-          "light": "resources/light/rename.svg"
-        }
+				"icon": {
+					"dark": "resources/dark/rename.svg",
+					"light": "resources/light/rename.svg"
+				}
 			},
 			{
 				"command": "sftp.revealInExplorer",
