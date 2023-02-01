@@ -274,12 +274,20 @@
 			{
 				"command": "sftp.rename.file",
 				"title": "Rename File",
-				"category": "SFTP"
+				"category": "SFTP",
+        "icon": {
+          "dark": "resources/dark/rename.svg",
+          "light": "resources/light/rename.svg"
+        }
 			},
 			{
 				"command": "sftp.rename.folder",
 				"title": "Rename Folder",
-				"category": "SFTP"
+				"category": "SFTP",
+        "icon": {
+          "dark": "resources/dark/rename.svg",
+          "light": "resources/light/rename.svg"
+        }
 			},
 			{
 				"command": "sftp.revealInExplorer",
@@ -616,11 +624,6 @@
 					"when": "sftp.enabled && view == remoteExplorer && viewItem != file"
 				},
 				{
-					"command": "sftp.download.folder",
-					"group": "inline",
-					"when": "sftp.enabled && view == remoteExplorer && viewItem != file && viewItem != root"
-				},
-				{
 					"command": "sftp.download.folderAs",
 					"group": "3_trans@2",
 					"when": "sftp.enabled && view == remoteExplorer && viewItem != file && !listMultiSelection"
@@ -628,11 +631,6 @@
 				{
 					"command": "sftp.download.file",
 					"group": "3_trans@2",
-					"when": "view == remoteExplorer && viewItem != root && viewItem == file"
-				},
-				{
-					"command": "sftp.download.file",
-					"group": "inline",
 					"when": "view == remoteExplorer && viewItem != root && viewItem == file"
 				},
 				{
@@ -659,6 +657,26 @@
 					"command": "sftp.remote.chmod",
 					"group": "3_trans@3",
 					"when": "view == remoteExplorer && viewItem != root && !listMultiSelection"
+				},
+				{
+					"command": "sftp.download.folder",
+					"group": "inline",
+					"when": "sftp.enabled && view == remoteExplorer && viewItem != file && viewItem != root"
+				},
+				{
+					"command": "sftp.rename.folder",
+					"group": "inline",
+					"when": "view == remoteExplorer && viewItem != root && viewItem != file && !listMultiSelection"
+				},
+				{
+					"command": "sftp.download.file",
+					"group": "inline",
+					"when": "view == remoteExplorer && viewItem != root && viewItem == file"
+				},
+				{
+					"command": "sftp.rename.file",
+					"group": "inline",
+					"when": "view == remoteExplorer && viewItem != root && viewItem == file && !listMultiSelection"
 				}
 			],
 			"scm/title": [
