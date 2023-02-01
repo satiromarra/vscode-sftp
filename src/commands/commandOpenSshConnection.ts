@@ -4,6 +4,7 @@ import { getAllFileService } from '../modules/serviceManager';
 import { ExplorerRoot } from '../modules/remoteExplorer';
 import { interpolate } from '../utils';
 import { checkCommand } from './abstract/createCommand';
+import { showInformationMessage } from '../host';
 
 const isWindows = process.platform === 'win32';
 
@@ -44,6 +45,7 @@ export default checkCommand({
     if (exploreItem && exploreItem.explorerContext) {
       remoteConfig = exploreItem.explorerContext.config;
       if (remoteConfig.protocol !== 'sftp') {
+        showInformationMessage("Only connections SFTP");
         return;
       }
     } else {
