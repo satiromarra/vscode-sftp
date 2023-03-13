@@ -722,7 +722,7 @@
 		"yargs-parser": "^20.2.4"
 	},
 	"dependencies": {
-		"@vscode/webview-ui-toolkit": "^1.2.1",
+		"@vscode/webview-ui-toolkit": "^1.2.2",
 		"async": "^3.2.4",
 		"fs-extra": "^11.1.0",
 		"ftp": "^0.3.10",
