@@ -696,7 +696,7 @@
 		"pub:debug": "rm -rf _debug && mkdir _debug && vsce package --out _debug/sftp-debug.vsix && cd _debug && git init && git commit --allow-empty -m 'update debug package' && git checkout -b debug-package && cp ../INSTALL_DEBUG.md README.md  && git add . && git commit -am 'update debug package' && git push git@github.com:satiromarra/vscode-sftp.git debug-package --force"
 	},
 	"devDependencies": {
-		"@types/babel__traverse": "^7.0.6",
+		"@types/babel__traverse": "^7.18.3",
 		"@types/fs-extra": "^11.0.1",
 		"@types/jest": "^29.5.1",
 		"@types/lru-cache": "^4.1.1",
