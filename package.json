@@ -711,7 +711,7 @@
 		"memfs": "^3.4.13",
 		"merge": ">=2.1.1",
 		"node-notifier": ">=8.0.1",
-		"rimraf": "^2.7.1",
+		"rimraf": "^5.0.0",
 		"set-value": "^4.0.1",
 		"ts-loader": "^9.4.1",
 		"tslint": "^6.1.3",
