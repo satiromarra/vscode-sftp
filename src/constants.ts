@@ -60,6 +60,7 @@ export const COMMAND_REVEAL_IN_REMOTE_EXPLORER = 'sftp.revealInRemoteExplorer';
 export const COMMAND_REMOTEEXPLORER_REFRESH = 'sftp.remoteExplorer.refresh';
 export const COMMAND_REMOTEEXPLORER_EDITINLOCAL = 'sftp.remoteExplorer.editInLocal';
 export const COMMAND_REMOTEEXPLORER_VIEW_CONTENT = 'sftp.viewContent';
+export const COMMAND_RECONNECT_CONNECTION = 'sftp.remoteExplorer.reconnect';
 
 export const COMMAND_CREATE_FOLDER = 'sftp.create.folder';
 export const COMMAND_CREATE_FILE = 'sftp.create.file';

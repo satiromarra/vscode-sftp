@@ -84,10 +84,10 @@ interface FtpOption {
 
 export interface FileServiceConfig
   extends Root,
-    Host,
-    ServiceOption,
-    SftpOption,
-    FtpOption {
+  Host,
+  ServiceOption,
+  SftpOption,
+  FtpOption {
   profiles?: {
     [x: string]: FileServiceConfig;
   };
@@ -95,10 +95,10 @@ export interface FileServiceConfig
 
 export interface ServiceConfig
   extends Root,
-    Host,
-    Omit<ServiceOption, 'ignore'>,
-    SftpOption,
-    FtpOption {
+  Host,
+  Omit<ServiceOption, 'ignore'>,
+  SftpOption,
+  FtpOption {
   ignore?: ((fsPath: string) => boolean) | null;
 }
 
@@ -311,7 +311,7 @@ function getCompleteConfig(
   if (mergedConfig.agent && mergedConfig.privateKeyPath) {
     logger.warn(
       'Config Option Conflicted. You are specifing "agent" and "privateKey" at the same time, ' +
-        'the later will be ignored.'
+      'the later will be ignored.'
     );
   }
 
@@ -405,6 +405,11 @@ export default class FileService {
 
   set name(name: string) {
     this._name = name;
+  }
+
+  reconnect(): Promise<FileSystem> {
+    this._disposeFileSystem();
+    return createRemoteIfNoneExist(getHostInfo(this.getConfig()));
   }
 
   setConfigValidator(configValidator: ConfigValidator) {
@@ -529,8 +534,8 @@ export default class FileService {
       if (!profile) {
         throw new Error(
           `Unkown Profile "${useProfile}".` +
-            ' Please check your profile setting.' +
-            ' You can set a profile by running command `SFTP: Set Profile`.'
+          ' Please check your profile setting.' +
+          ' You can set a profile by running command `SFTP: Set Profile`.'
         );
       }
       config = mergeProfile(config, profile);

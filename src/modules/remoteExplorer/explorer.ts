@@ -66,7 +66,12 @@ export default class RemoteExplorer {
   findRoot(remoteUri: vscode.Uri) {
     return this._treeDataProvider.findRoot(remoteUri);
   }
-
+  // the treeview is Collapsed or Extended? 
+  // at the moment I can't find how.
+  isOpen(item: ExplorerItem): boolean {
+    return true;
+    // return this._explorerView.visible;
+  }
   private _refreshSelection() {
     if (this._explorerView.selection.length) {
       this._explorerView.selection.forEach(item => this.refresh(item));

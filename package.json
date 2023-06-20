@@ -275,6 +275,14 @@
           "light": "resources/light/refresh.svg",
           "dark": "resources/dark/refresh.svg"
         }
+      },
+      {
+        "command": "sftp.remoteExplorer.reconnect",
+        "title": "Reconnect",
+        "icon": {
+          "light": "resources/light/connect.svg",
+          "dark": "resources/dark/connect.svg"
+        }
       }
     ],
     "menus": {
@@ -430,6 +438,10 @@
         {
           "command": "sftp.remoteExplorer.refresh",
           "when": "false"
+        },
+        {
+          "command": "sftp.remoteExplorer.reconnect",
+          "when": "false"
         }
       ],
       "explorer/context": [
@@ -553,6 +565,11 @@
           "command": "sftp.viewContent",
           "group": "2_files",
           "when": "view == remoteExplorer && viewItem == file && config.sftp.downloadWhenOpenInRemoteExplorer"
+        },
+        {
+          "command": "sftp.remoteExplorer.reconnect",
+          "group": "inline@4",
+          "when": "view == remoteExplorer && viewItem == root"
         },
         {
           "command": "sftp.revealInExplorer",
