@@ -11,7 +11,7 @@ import upath from './upath';
 import Ignore from './ignore';
 import { FileSystem } from './fs';
 import Scheduler from './scheduler';
-import { createRemoteIfNoneExist, removeRemoteFs } from './remoteFs';
+import { createRemoteIfNoneExist, existsRemoteFs, removeRemoteFs } from './remoteFs';
 import TransferTask from './transferTask';
 import localFs from './localFs';
 
@@ -84,10 +84,10 @@ interface FtpOption {
 
 export interface FileServiceConfig
   extends Root,
-    Host,
-    ServiceOption,
-    SftpOption,
-    FtpOption {
+  Host,
+  ServiceOption,
+  SftpOption,
+  FtpOption {
   profiles?: {
     [x: string]: FileServiceConfig;
   };
@@ -95,10 +95,10 @@ export interface FileServiceConfig
 
 export interface ServiceConfig
   extends Root,
-    Host,
-    Omit<ServiceOption, 'ignore'>,
-    SftpOption,
-    FtpOption {
+  Host,
+  Omit<ServiceOption, 'ignore'>,
+  SftpOption,
+  FtpOption {
   ignore?: ((fsPath: string) => boolean) | null;
 }
 
@@ -311,7 +311,7 @@ function getCompleteConfig(
   if (mergedConfig.agent && mergedConfig.privateKeyPath) {
     logger.warn(
       'Config Option Conflicted. You are specifing "agent" and "privateKey" at the same time, ' +
-        'the later will be ignored.'
+      'the later will be ignored.'
     );
   }
 
@@ -367,6 +367,13 @@ enum Event {
 
 let id = 0;
 
+
+enum ConnectionStatus {
+  DISCONNECTED = 0,
+  CONNECTING = 1,
+  CONNECTED = 2,
+}
+
 export default class FileService {
   private _eventEmitter: EventEmitter = new EventEmitter();
   private _name: string;
@@ -375,6 +382,7 @@ export default class FileService {
   private _pendingTransferTasks: Set<TransferTask> = new Set();
   private _transferSchedulers: TransferScheduler[] = [];
   private _config: FileServiceConfig;
+  private _status: ConnectionStatus = ConnectionStatus.DISCONNECTED;
   private _configValidator: ConfigValidator;
   private _watcherService: WatcherService = {
     create() {
@@ -516,7 +524,17 @@ export default class FileService {
   }
 
   getRemoteFileSystem(config: ServiceConfig): Promise<FileSystem> {
-    return createRemoteIfNoneExist(getHostInfo(config));
+    if (this.isConnected()) {
+      return createRemoteIfNoneExist(getHostInfo(config));
+    }
+    this.setConnecting();
+    const o = createRemoteIfNoneExist(getHostInfo(config));
+    o.then((ok) => {
+      this.setConnected();
+    }).catch(() => {
+      this.setDisconnected();
+    });
+    return o;
   }
 
   getConfig(useProfile = app.state.profile): ServiceConfig {
@@ -529,8 +547,8 @@ export default class FileService {
       if (!profile) {
         throw new Error(
           `Unkown Profile "${useProfile}".` +
-            ' Please check your profile setting.' +
-            ' You can set a profile by running command `SFTP: Set Profile`.'
+          ' Please check your profile setting.' +
+          ' You can set a profile by running command `SFTP: Set Profile`.'
         );
       }
       config = mergeProfile(config, profile);
@@ -629,4 +647,47 @@ export default class FileService {
   private _disposeFileSystem() {
     return removeRemoteFs(getHostInfo(this.getConfig()));
   }
+
+
+  setConnecting() {
+    this._status = ConnectionStatus.CONNECTING;
+  }
+  setConnected() {
+    this._status = ConnectionStatus.CONNECTED;
+  }
+  setDisconnected() {
+    this._status = ConnectionStatus.DISCONNECTED;
+  }
+
+  isConnected(): boolean {
+    return (this._status == ConnectionStatus.CONNECTED || existsRemoteFs(getHostInfo(this.getConfig())));
+  }
+
+  isDisconnected(): boolean {
+    return this._status == ConnectionStatus.DISCONNECTED;
+  }
+
+  isConnecting(): boolean {
+    return this._status == ConnectionStatus.CONNECTING;
+  }
+
+  connect(): Promise<FileSystem> {
+    this._disposeFileSystem();
+    return this.getRemoteFileSystem(this.getConfig());
+  }
+
+  reconnect(): Promise<FileSystem> {
+    this._disposeFileSystem();
+    return this.connect();
+  }
+
+  disconnect(): Promise<FileService> {
+    this._status = ConnectionStatus.DISCONNECTED;
+    this._disposeWatcher();
+    this._disposeFileSystem();
+    return new Promise((resolve, reject) => {
+      resolve(this);
+    });
+  }
+
 }

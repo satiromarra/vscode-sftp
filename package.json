@@ -283,6 +283,30 @@
           "light": "resources/light/refresh.svg",
           "dark": "resources/dark/refresh.svg"
         }
+      },
+      {
+        "command": "sftp.remoteExplorer.connect",
+        "title": "Connect",
+        "icon": {
+          "light": "resources/light/connect.svg",
+          "dark": "resources/dark/connect.svg"
+        }
+      },
+      {
+        "command": "sftp.remoteExplorer.reconnect",
+        "title": "Reconnect",
+        "icon": {
+          "light": "resources/light/reconnect.svg",
+          "dark": "resources/dark/reconnect.svg"
+        }
+      },
+      {
+        "command": "sftp.remoteExplorer.disconnect",
+        "title": "Disconnect",
+        "icon": {
+          "light": "resources/light/disconnect.svg",
+          "dark": "resources/dark/disconnect.svg"
+        }
       }
     ],
     "menus": {
@@ -438,6 +462,18 @@
         {
           "command": "sftp.remoteExplorer.refresh",
           "when": "false"
+        },
+        {
+          "command": "sftp.remoteExplorer.connect",
+          "when": "false"
+        },
+        {
+          "command": "sftp.remoteExplorer.reconnect",
+          "when": "false"
+        },
+        {
+          "command": "sftp.remoteExplorer.disconnect",
+          "when": "false"
         }
       ],
       "explorer/context": [
@@ -550,7 +586,7 @@
         {
           "command": "sftp.openConnectInTerminal",
           "group": "navigation",
-          "when": "view == remoteExplorer && viewItem == root"
+          "when": "view == remoteExplorer && (viewItem == root-disconnected || viewItem == root-connected)"
         },
         {
           "command": "sftp.remoteExplorer.editInLocal",
@@ -565,7 +601,7 @@
         {
           "command": "sftp.revealInExplorer",
           "group": "2_files",
-          "when": "view == remoteExplorer && viewItem != root"
+          "when": "view == remoteExplorer && (viewItem == file || viewItem == folder)"
         },
         {
           "command": "sftp.upload.folder",
@@ -576,7 +612,7 @@
         {
           "command": "sftp.upload.file",
           "group": "3_trans@1",
-          "when": "view == remoteExplorer && viewItem != root && viewItem == file"
+          "when": "view == remoteExplorer && viewItem == file"
         },
         {
           "command": "sftp.upload.folder.to.allProfiles",
@@ -587,7 +623,7 @@
         {
           "command": "sftp.upload.file.to.allProfiles",
           "group": "3_trans@1",
-          "when": "view == remoteExplorer && viewItem != root && viewItem == file"
+          "when": "view == remoteExplorer && viewItem == file"
         },
         {
           "command": "sftp.download.folder",
@@ -598,22 +634,22 @@
         {
           "command": "sftp.download.file",
           "group": "3_trans@2",
-          "when": "view == remoteExplorer && viewItem != root && viewItem == file"
+          "when": "view == remoteExplorer && viewItem == file"
         },
         {
           "command": "sftp.delete.remote",
           "group": "7_modification",
-          "when": "view == remoteExplorer && viewItem != root"
+          "when": "view == remoteExplorer && (viewItem == file || viewItem == folder)"
         },
         {
           "command": "sftp.create.folder",
           "group": "7_modification",
-          "when": "view == remoteExplorer && viewItem != file"
+          "when": "view == remoteExplorer && (viewItem == folder || viewItem == root-connected)"
         },
         {
           "command": "sftp.create.file",
           "group": "7_modification",
-          "when": "view == remoteExplorer && viewItem != file"
+          "when": "view == remoteExplorer && (viewItem == folder || viewItem == root-connected)"
         },
         {
           "command": "sftp.download.file",
@@ -624,6 +660,21 @@
           "command": "sftp.download.folder",
           "group": "inline",
           "when": "sftp.enabled && view == remoteExplorer && viewItem == folder"
+        },
+        {
+          "command": "sftp.remoteExplorer.reconnect",
+          "group": "inline@4",
+          "when": "view == remoteExplorer && (viewItem == root-connected)"
+        },
+        {
+          "command": "sftp.remoteExplorer.connect",
+          "group": "inline@4",
+          "when": "view == remoteExplorer && (viewItem == root-disconnected)"
+        },
+        {
+          "command": "sftp.remoteExplorer.disconnect",
+          "group": "inline@4",
+          "when": "view == remoteExplorer && (viewItem == root-connected)"
         }
       ],
       "scm/title": [

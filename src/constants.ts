@@ -63,3 +63,7 @@ export const COMMAND_REMOTEEXPLORER_VIEW_CONTENT = 'sftp.viewContent';
 
 export const COMMAND_CREATE_FOLDER = 'sftp.create.folder';
 export const COMMAND_CREATE_FILE = 'sftp.create.file';
+
+export const COMMAND_RECONNECT_CONNECTION = 'sftp.remoteExplorer.reconnect';
+export const COMMAND_CONNECT_CONNECTION = 'sftp.remoteExplorer.connect';
+export const COMMAND_DISCONNECT_CONNECTION = 'sftp.remoteExplorer.disconnect';

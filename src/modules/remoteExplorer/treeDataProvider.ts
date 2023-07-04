@@ -16,6 +16,9 @@ import {
 } from '../../constants';
 import { getAllFileService } from '../serviceManager';
 import { getExtensionSetting } from '../ext';
+import logger from '../../logger';
+import app from '../../app';
+import { getIcon } from '../../utils';
 
 type Id = number;
 
@@ -40,9 +43,19 @@ function makePreivewUrl(uri: vscode.Uri) {
   });
 }
 
+export enum ItemType {
+  ROOT = "root",
+  FOLDER = "folder",
+  FILE = "file",
+}
+
 interface ExplorerChild {
   resource: Resource;
   isDirectory: boolean;
+  onDidExpand?: Function;
+  onDidCollapse?: Function;
+  isExpanded?: boolean;
+  type?: string
 }
 
 export interface ExplorerRoot extends ExplorerChild {
@@ -65,8 +78,8 @@ function dirFirstSort(fileA: ExplorerItem, fileB: ExplorerItem) {
 
 export default class RemoteTreeData
   implements vscode.TreeDataProvider<ExplorerItem>, vscode.TextDocumentContentProvider {
-  private _roots: ExplorerRoot[] | null;
-  private _rootsMap: Map<Id, ExplorerRoot> | null;
+  private _roots: ExplorerRoot[] = [];
+  private _rootsMap: Map<Id, ExplorerRoot> = new Map();
   private _map: Map<vscode.Uri['query'], ExplorerItem>;
 
   private _onDidChangeFolder: vscode.EventEmitter<ExplorerItem> = new vscode.EventEmitter<
@@ -76,20 +89,54 @@ export default class RemoteTreeData
   readonly onDidChangeTreeData: vscode.Event<ExplorerItem> = this._onDidChangeFolder.event;
   readonly onDidChange: vscode.Event<vscode.Uri> = this._onDidChangeFile.event;
 
+  actionRootExpand = async (item: ExplorerItem) => {
+    item.isExpanded = true;
+    console.log("ExpandRoot!" + item.isExpanded);
+    const root = (item as ExplorerRoot);
+    if (!root.explorerContext.fileService.isConnected() && !root.explorerContext.fileService.isConnecting()) {
+      root.explorerContext.fileService.setConnecting();
+      app.remoteExplorer.refresh(undefined);
+      root.explorerContext.fileService.connect().then((ok) => {
+        app.remoteExplorer.refresh(undefined);
+        console.log("Refresh list");
+      }).catch((e) => {
+        logger.error(e);
+      });
+    }
+    console.log("Expended Root!");
+  };
+  actionRootCollapse = async (item: ExplorerItem) => {
+    item.isExpanded = false;
+    console.log("CollapseRoot!" + item.isExpanded);
+  };
+  actionItemExpand = async (item: ExplorerItem) => {
+    item.isExpanded = true;
+    console.log("ExpandItem!" + item.isExpanded);
+  };
+  actionItemCollapse = async (item: ExplorerItem) => {
+    item.isExpanded = false;
+    console.log("CollapseItem!" + item.isExpanded);
+  };
+
+  async reset(item?: ExplorerItem): Promise<any> {
+    this._roots = [];
+    //this._rootsMap = new Map();
+    this._onDidChangeFolder.fire(item);
+    return;
+  }
+
   async refresh(item?: ExplorerItem): Promise<any> {
     // refresh root
     if (!item) {
       // clear cache
-      this._roots = null;
-      this._rootsMap = null;
-
+      this._roots = [];
+      //this._rootsMap = new Map();
       this._onDidChangeFolder.fire();
       return;
     }
 
     if (item.isDirectory) {
       this._onDidChangeFolder.fire(item);
-
       // refresh top level files as well
       const children = await this.getChildren(item);
       children
@@ -105,29 +152,60 @@ export default class RemoteTreeData
   }
 
   getTreeItem(item: ExplorerItem): vscode.TreeItem {
-    const isRoot = (item as ExplorerRoot).explorerContext !== undefined;
-    let customLabel;
+    const explorer = (item as ExplorerRoot).explorerContext;
+    const isRoot = explorer !== undefined;
+    let customLabel: string = "",
+      customIcon,
+      customState: vscode.TreeItemCollapsibleState | undefined = undefined;;
+
     if (isRoot) {
-      customLabel = (item as ExplorerRoot).explorerContext.fileService.name;
+      customLabel = explorer.config.name || explorer.config.host;
+      // customLabel = explorer.fileService.name;
+      customIcon = getIcon(explorer.fileService.isConnected() ? 'cloud-connected' : 'cloud-disconnected');
+      if (explorer.fileService.isConnecting()) {
+        customState = undefined;
+        customLabel += " (connecting...)"
+      } else if (explorer.fileService.isConnected()) {
+        customState = vscode.TreeItemCollapsibleState.Expanded;
+      } else {
+        customState = vscode.TreeItemCollapsibleState.Collapsed;
+      }
+      if (customState == vscode.TreeItemCollapsibleState.Expanded && !item.isExpanded) {
+        customState = vscode.TreeItemCollapsibleState.Collapsed;
+      }
+    } else if (item.isDirectory) {
+      customState = vscode.TreeItemCollapsibleState.Collapsed;
     }
     if (!customLabel) {
       customLabel = upath.basename(item.resource.fsPath);
     }
-    return {
+    const i = {
       label: customLabel,
+      id: undefined,
       resourceUri: item.resource.uri,
-      collapsibleState: item.isDirectory ? vscode.TreeItemCollapsibleState.Collapsed : undefined,
-      contextValue: isRoot ? 'root' : item.isDirectory ? 'folder' : 'file',
+      collapsibleState: customState,
+      contextValue: item.isDirectory ? ItemType.FOLDER : ItemType.FILE,
+      // collapsibleState: item.isDirectory ? vscode.TreeItemCollapsibleState.Collapsed : undefined,
+      // contextValue: isRoot ? 'root' : item.isDirectory ? 'folder' : 'file',
       command: item.isDirectory
         ? undefined
         : {
-            command: getExtensionSetting().downloadWhenOpenInRemoteExplorer
-              ? COMMAND_REMOTEEXPLORER_EDITINLOCAL
-              : COMMAND_REMOTEEXPLORER_VIEW_CONTENT,
-            arguments: [item],
-            title: 'View Remote Resource',
-          },
-    };
+          command: getExtensionSetting().downloadWhenOpenInRemoteExplorer
+            ? COMMAND_REMOTEEXPLORER_EDITINLOCAL
+            : COMMAND_REMOTEEXPLORER_VIEW_CONTENT,
+          arguments: [item],
+          title: 'View Remote Resource',
+        },
+      onDidExpand: () => { },
+      onDidCollapse: () => { },
+      iconPath: customIcon
+    } as vscode.TreeItem;
+
+    if (isRoot) {
+      i.contextValue = ItemType.ROOT + (explorer.fileService.isConnected() ? "-connected" : "-disconnected");
+      i.id = `${i.label}-${Date.now()}`;
+    }
+    return i;
   }
 
   async getChildren(item?: ExplorerItem): Promise<ExplorerItem[]> {
@@ -138,6 +216,10 @@ export default class RemoteTreeData
     const root = this.findRoot(item.resource.uri);
     if (!root) {
       throw new Error(`Can't find config for remote resource ${item.resource.uri}.`);
+    }
+    if (item.type == ItemType.ROOT && !root.explorerContext.fileService.isConnected()) {
+      console.log("Root is not connected");
+      return [];
     }
     const config = root.explorerContext.config;
     const remotefs = await root.explorerContext.fileService.getRemoteFileSystem(config);
@@ -164,16 +246,24 @@ export default class RemoteTreeData
         const mapItem = this._map.get(newResource.uri.query);
         if (mapItem) {
           return mapItem;
-        } else {
-          const newItem = {
-            resource: UResource.updateResource(item.resource, {
-              remotePath: file.fspath,
-            }),
-            isDirectory,
-          };
-          this._map.set(newItem.resource.uri.query, newItem);
-          return newItem;
         }
+        const newItem = {
+          type: item.isDirectory ? "dir" : "file",
+          resource: UResource.updateResource(item.resource, {
+            remotePath: file.fspath,
+          }),
+          isDirectory,
+          isExpanded: item.isDirectory ? false : undefined,
+          onDidExpand: async () => {
+            await this.actionItemExpand(newItem);
+          },
+          onDidCollapse: async () => {
+            await this.actionItemCollapse(newItem);
+          }
+        } as ExplorerItem;
+        this._map.set(newItem.resource.uri.query, newItem);
+        return newItem;
+
       })
       .sort(dirFirstSort);
   }
@@ -200,6 +290,7 @@ export default class RemoteTreeData
       const newMapItem = {
         resource: newResource,
         isDirectory: true,
+        type: item.isDirectory ? "dir" : "file"
       };
       this._map.set(newResource.uri.query, newMapItem);
       await this.getChildren(newMapItem);
@@ -208,7 +299,7 @@ export default class RemoteTreeData
   }
 
   findRoot(uri: vscode.Uri): ExplorerRoot | null | undefined {
-    if (!this._rootsMap) {
+    if (!this._rootsMap.size) {
       return null;
     }
 
@@ -240,17 +331,20 @@ export default class RemoteTreeData
   }
 
   private _getRoots(): ExplorerRoot[] {
-    if (this._roots) {
+    if (this._roots.length) {
       return this._roots;
     }
-
+    const oldRootMap = this._rootsMap;
+    console.log({ old1: oldRootMap.size });
     this._roots = [];
     this._rootsMap = new Map();
     this._map = new Map();
+    console.log({ old2: oldRootMap.size });
     getAllFileService().forEach(fileService => {
       const config = fileService.getConfig();
       const id = fileService.id;
-      const item = {
+      const item = oldRootMap.has(id) ? oldRootMap.get(id)! : {
+        type: ItemType.ROOT,
         resource: UResource.makeResource({
           remote: {
             host: config.host,
@@ -265,12 +359,46 @@ export default class RemoteTreeData
           config,
           id,
         },
-      };
-      this._roots!.push(item);
-      this._rootsMap!.set(id, item);
+        isExpanded: false,
+        onDidExpand: async () => {
+          this.actionRootExpand(item);
+        },
+        onDidCollapse: async () => {
+          await this.actionRootCollapse(item);
+        }
+      } as ExplorerRoot;
+      console.log(item.isExpanded);
+      this._roots.push(item);
+      this._rootsMap.set(id, item);
       this._map.set(item.resource.uri.query, item);
     });
-    this._roots.sort((a,b) => a.explorerContext.config.remoteExplorer.order - b.explorerContext.config.remoteExplorer.order || a.explorerContext.fileService.name.localeCompare(b.explorerContext.fileService.name));
+    this._roots.sort((a, b) => a.explorerContext.config.remoteExplorer.order - b.explorerContext.config.remoteExplorer.order || a.explorerContext.fileService.name.localeCompare(b.explorerContext.fileService.name));
     return this._roots;
   }
+
+
+
+  activateTreeViewEventHandlers = (treeView: vscode.TreeView<ExplorerItem>): void => {
+    treeView.onDidCollapseElement((event: any) => {
+      logger.info('Tree item was collapsed');
+
+      event.element.isExpanded = false;
+      if (event.element.onDidCollapse) {
+        event.element.onDidCollapse();
+      }
+    });
+
+    treeView.onDidExpandElement(async (event: any): Promise<void> => {
+      logger.info('Tree item was expanded');
+      event.element.isExpanded = true;
+      if (event.element.onDidExpand) {
+        await event.element.onDidExpand();
+      }
+      // this.refresh();
+    });
+
+    treeView.onDidChangeSelection(async (event: any) => {
+      logger.info("tree item changed")
+    });
+  };
 }

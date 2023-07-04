@@ -25,11 +25,16 @@ export default class RemoteExplorer {
       treeDataProvider: this._treeDataProvider,
       canSelectMany: true,
     });
+    this._treeDataProvider.activateTreeViewEventHandlers(this._explorerView);
 
     registerCommand(context, COMMAND_REMOTEEXPLORER_REFRESH, () => this._refreshSelection());
     registerCommand(context, COMMAND_REMOTEEXPLORER_VIEW_CONTENT, (item: ExplorerItem) =>
       this._treeDataProvider.showItem(item)
     );
+  }
+
+  reset(item?: ExplorerItem) {
+    this._treeDataProvider.reset(item);
   }
 
   refresh(item?: ExplorerItem) {

@@ -28,6 +28,7 @@ function setup(workspaceFolders: vscode.WorkspaceFolder[]) {
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export async function activate(context: vscode.ExtensionContext) {
+  app.ctx = context;
   try {
     initCommands(context);
   } catch (error) {

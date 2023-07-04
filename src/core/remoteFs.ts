@@ -141,3 +141,8 @@ export function removeRemoteFs(option) {
     delete fsTable[identity];
   }
 }
+
+export function existsRemoteFs(option): boolean {
+  const identity = hashOption(option);
+  return fsTable[identity] !== undefined;
+}
