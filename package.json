@@ -59,12 +59,12 @@
         "sftp.printDebugLog": {
           "type": "boolean",
           "default": false,
-          "description": "print debug log on sftp output channel.(reload vscode when change this)"
+          "description": "print debug log on sftp output channel.(reload vscode when changing this)"
         },
         "sftp.debug": {
           "type": "boolean",
           "default": false,
-          "description": "print debug log on sftp output channel.(reload vscode when change this)"
+          "description": "print debug log on sftp output channel.(reload vscode when changing this)"
         },
         "sftp.downloadWhenOpenInRemoteExplorer": {
           "type": "boolean",
