@@ -1,5 +1,5 @@
 import * as path from 'path';
-import { Uri, window } from 'vscode';
+import { Uri, window, workspace } from 'vscode';
 import { FileType } from '../core';
 import { getAllFileService } from '../modules/serviceManager';
 import { ExplorerItem } from '../modules/remoteExplorer';
@@ -56,9 +56,11 @@ export function selectContext(): Promise<Uri | undefined> {
       }))
       .sort((l, r) => l.label.localeCompare(r.label));
 
-    // if (projectsList.length === 1) {
-    // return resolve(projectsList[0].value);
-    // }
+    const config = workspace.getConfiguration();
+    const skipSingle = config.get<boolean>('sftp.skipFolderSelectionWhenSingleFolder')
+    if (projectsList.length === 1 && skipSingle) {
+      return resolve(Uri.file(projectsList[0].value));
+    }
 
     window
       .showQuickPick(projectsList, {

@@ -69,6 +69,11 @@
 					"type": "boolean",
 					"default": false,
 					"description": "\"Download\" instead of \"View Content\" when open file in Remote Explorer"
+				},
+				"sftp.skipFolderSelectionWhenSingleFolder": {
+					"type": "boolean",
+					"default": false,
+					"description": "skip folder selection when single folder"
 				}
 			}
 		},

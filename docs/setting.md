@@ -15,3 +15,8 @@ You can view the login in `View --> Output --> SFTP`.  Changing this requires VS
 *boolean*: Change the default behavior from `View Content` to `Edit in Local` when opening files in the Remote Explorer.
 
 **default**: false
+
+## skipFolderSelectionWhenSingleFolder
+*boolean*: Prevents showing 'Select a folder...' when the number of candidate folders is one.
+
+**default**: false
